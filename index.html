@@ -2,100 +2,90 @@
 <html lang="tr">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ambar Pro - 3'lü Stok</title>
+<title>PRO AMBAR TAKİP</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-body{font-family:'Tahoma'; margin:0; background:#d4d0c8;}
-.header{background:linear-gradient(#0a3d91, #0054e3); color:white; padding:5px; font-size:14px; font-weight:bold;}
-.container{display:flex; max-width:1000px; margin:5px auto; background:#ece9d8; border:2px outset #fff;}
-.left{width:60%; padding:10px;}
-.right{width:40%; padding:10px; text-align:center;}
-input{width:90%; padding:3px; border:1px inset #ccc;}
-label{font-size:12px; width:130px; display:inline-block;}
-.row{margin:4px 0;}
-.btn{padding:6px 12px; margin:3px; background:#ece9d8; border:2px outset #fff; cursor:pointer; font-size:12px;}
-.btn:active{border:2px inset #fff;}
-.stok-kutu{border:1px solid #999; padding:5px; margin:3px 0; background:white;}
-.stok-baslik{font-weight:bold; background:#0a3d91; color:white; padding:3px; text-align:center;}
-.kritik{color:red; font-weight:bold;}
-.tabs{background:#ece9d8;}.tab{padding:5px 10px; border:1px outset #fff; display:inline-block; cursor:pointer;}
-.tab.aktif{background:white;}
-.tablo{width:100%; border-collapse:collapse; font-size:12px; background:white;}
-.tablo td,th{border:1px solid #ccc; padding:3px;}
+body{font-family:'Segoe UI'; margin:0; background:#f0f0f0;}
+.header{background:#0d6efd; color:white; padding:10px; font-size:18px; font-weight:bold;}
+.main{display:flex; height:90vh;}
+.sol{width:60%; background:white; padding:10px; overflow:auto;}
+.sag{width:40%; background:#eef2f7; padding:10px; border-left:2px solid #ccc;}
+input,select{padding:5px; margin:3px; border:1px solid #ccc; border-radius:4px;}
+.btn{padding:7px 12px; margin:3px; border:none; border-radius:4px; cursor:pointer; color:white;}
+.btn-ekle{background:#198754;} .btn-sil{background:#dc3545;} .btn-pdf{background:#0d6efd;}
+.tablo{width:100%; border-collapse:collapse; font-size:13px;}
+.tablo th{background:#0d6efd; color:white; padding:8px; position:sticky; top:0;}
+.tablo td{border:1px solid #ddd; padding:6px; cursor:pointer;}
+.tablo tr:hover{background:#e7f1ff;}
+.tablo tr.secili{background:#cfe2ff;}
+.resim-alani{width:100%; height:250px; border:2px dashed #ccc; background:white; display:flex; align-items:center; justify-content:center; margin-bottom:10px;}
+.resim-alani img{max-width:100%; max-height:100%;}
+.stoklar{display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; text-align:center;}
+.stok-kutu{background:white; padding:10px; border-radius:5px; border:1px solid #ccc;}
+.stok-kutu b{font-size:20px;}
 </style>
 </head>
 <body>
-<div class="header">🏭 Ambar Yönetim Sistemi - Kullanıcı: <span id="kadi"></span></div>
+<div class="header">🏭 PROFESYONEL AMBAR TAKİP SİSTEMİ</div>
 
 <div id="login" style="padding:50px; text-align:center;">
-<div style="background:white; width:300px; margin:auto; padding:20px; border:2px outset #fff;">
-<h3>Giriş</h3>
-<input id="kullanici" placeholder="Kullanıcı Adı: admin"><br><br>
+<input id="kullanici" placeholder="Kullanıcı: admin"><br><br>
 <input type="password" id="sifre" placeholder="Şifre: 1234"><br><br>
-<button class="btn" onclick="giris()">Tamam</button>
-</div></div>
+<button class="btn btn-ekle" onclick="giris()">GİRİŞ</button></div>
 
-<div id="main" style="display:none">
-<div class="tabs">
-<span class="tab aktif" onclick="goster('stok')">Stok Kartı</span>
-<span class="tab" onclick="goster('islem')">Stok İşlem</span>
-<span class="tab" onclick="goster('liste')">Stok Listesi</span>
-<button style="float:right" class="btn" onclick="cikis()">Çıkış</button>
+<div id="main" style="display:none" class="main">
+<div class="sol">
+<h3>Malzeme Listesi <input id="arama" placeholder="Ara..." onkeyup="listele()"></h3>
+<table class="tablo" id="tablo">
+<thead><tr><th>Kod</th><th>Malzeme Adı</th><th>Depo</th><th>Makine</th><th>Elimde</th><th>Toplam</th></tr></thead>
+<tbody></tbody>
+</table>
+<br>
+<button class="btn btn-ekle" onclick="yeniUrun()">+ Yeni Malzeme</button>
+<button class="btn btn-sil" onclick="silUrun()">Seçileni Sil</button>
+<button class="btn btn-pdf" onclick="excelCikis()">Excel Aktar</button>
+<button class="btn btn-pdf" onclick="pdfCikis()">PDF Rapor</button>
 </div>
-<div class="container" id="icerik"></div>
+
+<div class="sag" id="detay">
+<h3>Malzeme Detayı</h3>
+<div class="resim-alani" id="resimAlani">Resim Yok<br><input type="file" id="resimYukle" accept="image/*" onchange="resimEkle(event)"></div>
+<label>Kod:</label><input id="kod"><br>
+<label>Adı:</label><input id="ad"><br>
+<label>Birim:</label><select id="birim"><option>ADET</option><option>KG</option><option>MT</option></select><br>
+<label>Kritik Seviye:</label><input id="min" type="number"><br><hr>
+<div class="stoklar">
+<div class="stok-kutu">MAKİNE<br><b id="makine">0</b></div>
+<div class="stok-kutu">DEPO<br><b id="depo">0</b></div>
+<div class="stok-kutu">ELİMDE<br><b id="elde">0</b></div>
+</div><br>
+<h4>Stok İşlemi</h4>
+<select id="tur">
+<option value="depoya_gir">Depoya Giriş</option>
+<option value="makineye_gir">Depodan Makineye</option>
+<option value="eldeye_ver">Depodan Elime</option>
+<option value="kullanildi">Elimdekini Kullan</option>
+</select>
+<input id="miktar" type="number" value="1" style="width:60px">
+<button class="btn btn-ekle" onclick="islemYap()">Kaydet</button>
+</div>
 </div>
 
 <script>
 const { jsPDF } = window.jspdf;
+let seciliIndex = 0;
+let urunler = JSON.parse(localStorage.getItem('pro_ambar_urunler')) || [];
 let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar')) || [{kadi:"admin", sifre:"1234"}];
-let urunler = JSON.parse(localStorage.getItem('urunler')) || [{kod:"001", ad:"HP TARAYICI", makine:5, depo:20, elde:3, min:2}];
-function kaydet(){localStorage.setItem('kullanicilar',JSON.stringify(kullanicilar)); localStorage.setItem('urunler',JSON.stringify(urunler));}
-function giris(){let k=document.getElementById('kullanici').value; let s=document.getElementById('sifre').value; let u=kullanicilar.find(x=>x.kadi==k && x.sifre==s); if(u){document.getElementById('login').style.display='none'; document.getElementById('main').style.display='block'; document.getElementById('kadi').innerText=u.kadi; goster('stok');} else alert("Hatalı")}
-function cikis(){document.getElementById('login').style.display='block'; document.getElementById('main').style.display='none';}
-function goster(s){let html=""; let u=urunler[0]||{};
-if(s=='stok'){
-html=`<div class="left">
-<div class="row"><label>Stok Kodu</label><input id="kod" value="${u.kod}"></div>
-<div class="row"><label>Cinsi</label><input id="ad" value="${u.ad}"></div>
-<div class="row"><label>Kritik Seviye</label><input id="min" value="${u.min}" style="width:50px"></div>
-<button class="btn" onclick="kaydetUrun()">Stok KAYDET</button>
-<button class="btn" onclick="pdfCikis()">PDF Fiş</button>
-</div>
-<div class="right">
-<div class="stok-kutu"><div class="stok-baslik">MAKİNEDE STOK</div><h2 class="${u.makine<u.min?'kritik':''}">${u.makine} ADET</h2></div>
-<div class="stok-kutu"><div class="stok-baslik">DEPODA STOK</div><h2 class="${u.depo<u.min?'kritik':''}">${u.depo} ADET</h2></div>
-<div class="stok-kutu"><div class="stok-baslik">ELİMDE KALAN</div><h2 class="${u.elde<u.min?'kritik':''}">${u.elde} ADET</h2></div>
-<div class="stok-kutu"><div class="stok-baslik">TOPLAM</div><h2>${u.makine+u.depo+u.elde} ADET</h2></div>
-</div>`}
 
-if(s=='islem'){
-html=`<div class="left" style="width:100%">
-<h3>Stok İşlemleri</h3>
-<label>İşlem Türü:</label>
-<select id="tur">
-<option value="makineye_gir">Depodan Makineye Al</option>
-<option value="eldeye_ver">Depodan Elime Ver</option>
-<option value="kullanildi">Elimdekini Kullan - DÜŞ</option>
-<option value="depoya_gir">Makineden Depoya İade</option>
-</select><br><br>
-<label>Miktar:</label><input id="miktar" type="number" value="1"><br><br>
-<button class="btn" onclick="islemYap()">İŞLEMİ KAYDET</button>
-</div>`}
+if(urunler.length==0){
+urunler.push({kod:"YP-001", ad:"RULMAN 6204", birim:"ADET", min:5, makine:2, depo:10, elde:1, resim:""});
+}
 
-if(s=='liste'){
-let toplam=0; urunler.forEach(x=>toplam+=x.makine+x.depo+x.elde);
-html=`<div class="left" style="width:100%"><h3>Stok Listesi</h3><table class="tablo">
-<tr><th>Kod</th><th>Cinsi</th><th>Makine</th><th>Depo</th><th>Elimde</th><th>Toplam</th></tr>`;
-urunler.forEach(u=>html+=`<tr><td>${u.kod}</td><td>${u.ad}</td><td>${u.makine}</td><td>${u.depo}</td><td>${u.elde}</td><td>${u.makine+u.depo+u.elde}</td></tr>`);
-html+=`</table></div>`}
-document.getElementById('icerik').innerHTML=html;}
+function kaydet(){localStorage.setItem('pro_ambar_urunler',JSON.stringify(urunler));}
+function giris(){if(kullanici.value=="admin" && sifre.value=="1234"){document.getElementById('login').style.display='none'; document.getElementById('main').style.display='flex'; listele(); sec(0);} else alert("Hatalı")}
 
-function islemYap(){let tur=document.getElementById('tur').value; let m=parseFloat(document.getElementById('miktar').value); let u=urunler[0];
-if(tur=='makineye_gir'){if(u.depo<m)return alert("Depoda stok yok"); u.depo-=m; u.makine+=m;}
-if(tur=='eldeye_ver'){if(u.depo<m)return alert("Depoda stok yok"); u.depo-=m; u.elde+=m;}
-if(tur=='kullanildi'){if(u.elde<m)return alert("Elinde stok yok"); u.elde-=m;}
-if(tur=='depoya_gir'){if(u.makine<m)return alert("Makinede stok yok"); u.makine-=m; u.depo+=m;}
-kaydet(); alert("İşlem Kaydedildi"); goster('stok')}
-function kaydetUrun(){urunler[0].kod=kod.value; urunler[0].ad=ad.value; urunler[0].min=min.value; kaydet(); alert("Kaydedildi")}
-function pdfCikis(){const doc = new jsPDF(); let u=urunler[0]; doc.text("Stok Fişi", 10, 10); doc.text(`Ürün: ${u.ad}`,10,20); doc.text(`Makine: ${u.makine}`,10,30); doc.text(`Depo: ${u.depo}`,10,40); doc.text(`Elimde: ${u.elde}`,10,50); doc.save("stok_fisi.pdf");}
-</script></body></html>
+function listele(){
+let tbody = document.querySelector("#tablo tbody"); tbody.innerHTML="";
+let ara = arama.value.toLowerCase();
+urunler.filter(u=>u.k
