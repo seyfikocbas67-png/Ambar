@@ -2,26 +2,26 @@
 <html lang="tr">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ambar Pro</title>
+<title>Ambar Pro - 3'lü Stok</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 body{font-family:'Tahoma'; margin:0; background:#d4d0c8;}
 .header{background:linear-gradient(#0a3d91, #0054e3); color:white; padding:5px; font-size:14px; font-weight:bold;}
 .container{display:flex; max-width:1000px; margin:5px auto; background:#ece9d8; border:2px outset #fff;}
-.left{width:65%; padding:10px;}
-.right{width:35%; padding:10px; text-align:center;}
-input,select{width:95%; padding:3px; border:1px inset #ccc; background:white;}
-label{font-size:12px;}
-.row{display:flex; margin:4px 0;}
-.row label{width:100px;}
-.btn{width:120px; padding:5px; margin:3px; background:#ece9d8; border:2px outset #fff; cursor:pointer;}
+.left{width:60%; padding:10px;}
+.right{width:40%; padding:10px; text-align:center;}
+input{width:90%; padding:3px; border:1px inset #ccc;}
+label{font-size:12px; width:130px; display:inline-block;}
+.row{margin:4px 0;}
+.btn{padding:6px 12px; margin:3px; background:#ece9d8; border:2px outset #fff; cursor:pointer; font-size:12px;}
 .btn:active{border:2px inset #fff;}
-.resim{width:200px; height:150px; border:1px inset #ccc; background:#fff;}
+.stok-kutu{border:1px solid #999; padding:5px; margin:3px 0; background:white;}
+.stok-baslik{font-weight:bold; background:#0a3d91; color:white; padding:3px; text-align:center;}
+.kritik{color:red; font-weight:bold;}
 .tabs{background:#ece9d8;}.tab{padding:5px 10px; border:1px outset #fff; display:inline-block; cursor:pointer;}
-.tab.aktif{background:white; border-bottom:1px solid white;}
+.tab.aktif{background:white;}
 .tablo{width:100%; border-collapse:collapse; font-size:12px; background:white;}
 .tablo td,th{border:1px solid #ccc; padding:3px;}
-.kritik{background:#ffcccc;}
 </style>
 </head>
 <body>
@@ -38,45 +38,64 @@ label{font-size:12px;}
 <div id="main" style="display:none">
 <div class="tabs">
 <span class="tab aktif" onclick="goster('stok')">Stok Kartı</span>
-<span class="tab" onclick="goster('hareket')">Stok Hareketleri</span>
+<span class="tab" onclick="goster('islem')">Stok İşlem</span>
 <span class="tab" onclick="goster('liste')">Stok Listesi</span>
 <button style="float:right" class="btn" onclick="cikis()">Çıkış</button>
 </div>
-
 <div class="container" id="icerik"></div>
 </div>
 
 <script>
 const { jsPDF } = window.jspdf;
 let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar')) || [{kadi:"admin", sifre:"1234"}];
-let urunler = JSON.parse(localStorage.getItem('urunler')) || [{kod:"001", ad:"HP TARAYICI", birim:"ADET", stok:3, min:1, f1:75000000, f2:77000000}];
+let urunler = JSON.parse(localStorage.getItem('urunler')) || [{kod:"001", ad:"HP TARAYICI", makine:5, depo:20, elde:3, min:2}];
 function kaydet(){localStorage.setItem('kullanicilar',JSON.stringify(kullanicilar)); localStorage.setItem('urunler',JSON.stringify(urunler));}
 function giris(){let k=document.getElementById('kullanici').value; let s=document.getElementById('sifre').value; let u=kullanicilar.find(x=>x.kadi==k && x.sifre==s); if(u){document.getElementById('login').style.display='none'; document.getElementById('main').style.display='block'; document.getElementById('kadi').innerText=u.kadi; goster('stok');} else alert("Hatalı")}
 function cikis(){document.getElementById('login').style.display='block'; document.getElementById('main').style.display='none';}
-function goster(s){let html="";
+function goster(s){let html=""; let u=urunler[0]||{};
 if(s=='stok'){
-let u=urunler[0]||{};
 html=`<div class="left">
-<div class="row"><label>Stok Kodu</label><input id="kod" value="${u.kod||''}"></div>
-<div class="row"><label>Cinsi</label><input id="ad" value="${u.ad||''}"></div>
-<div class="row"><label>Birimi</label><select id="birim"><option>ADET</option><option>KG</option><option>MT</option></select> <label>Sınıfı</label><input style="width:50px"></div>
-<div class="row"><label>Açıklama 1</label><input></div>
-<div class="row"><label>Fiyat 1</label><input id="f1" value="${u.f1||''}"> <label>Fiyat 2</label><input id="f2" value="${u.f2||''}"></div>
-<div class="row"><label>Kritik Stok</label><input id="min" value="${u.min||''}" style="width:50px"></div>
+<div class="row"><label>Stok Kodu</label><input id="kod" value="${u.kod}"></div>
+<div class="row"><label>Cinsi</label><input id="ad" value="${u.ad}"></div>
+<div class="row"><label>Kritik Seviye</label><input id="min" value="${u.min}" style="width:50px"></div>
 <button class="btn" onclick="kaydetUrun()">Stok KAYDET</button>
 <button class="btn" onclick="pdfCikis()">PDF Fiş</button>
 </div>
 <div class="right">
-<label>STOK RESMİ</label><div class="resim"></div><br>
-<b>BAKİYE: ${u.stok||0}</b>
+<div class="stok-kutu"><div class="stok-baslik">MAKİNEDE STOK</div><h2 class="${u.makine<u.min?'kritik':''}">${u.makine} ADET</h2></div>
+<div class="stok-kutu"><div class="stok-baslik">DEPODA STOK</div><h2 class="${u.depo<u.min?'kritik':''}">${u.depo} ADET</h2></div>
+<div class="stok-kutu"><div class="stok-baslik">ELİMDE KALAN</div><h2 class="${u.elde<u.min?'kritik':''}">${u.elde} ADET</h2></div>
+<div class="stok-kutu"><div class="stok-baslik">TOPLAM</div><h2>${u.makine+u.depo+u.elde} ADET</h2></div>
+</div>`}
+
+if(s=='islem'){
+html=`<div class="left" style="width:100%">
+<h3>Stok İşlemleri</h3>
+<label>İşlem Türü:</label>
+<select id="tur">
+<option value="makineye_gir">Depodan Makineye Al</option>
+<option value="eldeye_ver">Depodan Elime Ver</option>
+<option value="kullanildi">Elimdekini Kullan - DÜŞ</option>
+<option value="depoya_gir">Makineden Depoya İade</option>
+</select><br><br>
+<label>Miktar:</label><input id="miktar" type="number" value="1"><br><br>
+<button class="btn" onclick="islemYap()">İŞLEMİ KAYDET</button>
 </div>`}
 
 if(s=='liste'){
-html=`<div class="left" style="width:100%"><h3>Stok Listesi</h3><table class="tablo"><tr><th>Kod</th><th>Cinsi</th><th>Birim</th><th>Stok</th></tr>`;
-urunler.forEach(u=>html+=`<tr class="${u.stok<u.min?'kritik':''}"><td>${u.kod}</td><td>${u.ad}</td><td>${u.birim}</td><td>${u.stok}</td></tr>`);
+let toplam=0; urunler.forEach(x=>toplam+=x.makine+x.depo+x.elde);
+html=`<div class="left" style="width:100%"><h3>Stok Listesi</h3><table class="tablo">
+<tr><th>Kod</th><th>Cinsi</th><th>Makine</th><th>Depo</th><th>Elimde</th><th>Toplam</th></tr>`;
+urunler.forEach(u=>html+=`<tr><td>${u.kod}</td><td>${u.ad}</td><td>${u.makine}</td><td>${u.depo}</td><td>${u.elde}</td><td>${u.makine+u.depo+u.elde}</td></tr>`);
 html+=`</table></div>`}
-
 document.getElementById('icerik').innerHTML=html;}
-function kaydetUrun(){let u={kod:kod.value, ad:ad.value, birim:birim.value, f1:f1.value, f2:f2.value, min:min.value, stok:3}; urunler=[u]; kaydet(); alert("Kaydedildi")}
-function pdfCikis(){const doc = new jsPDF(); doc.text("Stok Listesi", 10, 10); let y=20; urunler.forEach(u=>{doc.text(`${u.kod} - ${u.ad} - Stok: ${u.stok}`,10,y); y+=10}); doc.save("stok_listesi.pdf");}
+
+function islemYap(){let tur=document.getElementById('tur').value; let m=parseFloat(document.getElementById('miktar').value); let u=urunler[0];
+if(tur=='makineye_gir'){if(u.depo<m)return alert("Depoda stok yok"); u.depo-=m; u.makine+=m;}
+if(tur=='eldeye_ver'){if(u.depo<m)return alert("Depoda stok yok"); u.depo-=m; u.elde+=m;}
+if(tur=='kullanildi'){if(u.elde<m)return alert("Elinde stok yok"); u.elde-=m;}
+if(tur=='depoya_gir'){if(u.makine<m)return alert("Makinede stok yok"); u.makine-=m; u.depo+=m;}
+kaydet(); alert("İşlem Kaydedildi"); goster('stok')}
+function kaydetUrun(){urunler[0].kod=kod.value; urunler[0].ad=ad.value; urunler[0].min=min.value; kaydet(); alert("Kaydedildi")}
+function pdfCikis(){const doc = new jsPDF(); let u=urunler[0]; doc.text("Stok Fişi", 10, 10); doc.text(`Ürün: ${u.ad}`,10,20); doc.text(`Makine: ${u.makine}`,10,30); doc.text(`Depo: ${u.depo}`,10,40); doc.text(`Elimde: ${u.elde}`,10,50); doc.save("stok_fisi.pdf");}
 </script></body></html>
