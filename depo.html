@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Depo Yönetimi</title>
+<style>
+* {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif;}
+body {background:#f2f4f7; padding:15px;}
+.header {display:flex; justify-content:space-between; align-items:center; background:#0072ff; color:#fff; padding:15px; border-radius:10px; margin-bottom:15px;}
+.btn {padding:10px 15px; background:#00c6ff; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600;}
+.form, .liste {background:#fff; padding:15px; border-radius:10px; margin-bottom:15px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+input, select {width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:8px;}
+.kritik {background:#ffeb; border-left:4px solid #ff4d4d;}
+.depo-secim button {margin-right:10px; padding:10px 20px; border:none; border-radius:8px; cursor:pointer;}
+.aktif {background:#0072ff; color:#fff;}
+.pasif {background:#ddd;}
+.bildirim {background:#fff3cd; padding:10px; border-radius:8px; margin-bottom:10px; color:#856404;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h2>📦 Depo Yönetimi</h2>
+  <button class="btn" onclick="window.location='panel.html'">Geri</button>
+</div>
+
+<div id="bildirimAlani"></div>
+
+<div class="depo-secim">
+  <button id="btnAna" class="aktif" onclick="depoDegistir('Ana Depo')">Ana Depo</button>
+  <button id="btnMakine" class="pasif" onclick="depoDegistir('Makine Deposu')">Makine Deposu</button>
+</div>
+
+<div class="form">
+  <h3>Yeni Malzeme Ekle</h3>
+  <input type="text" id="malzemeAdi" placeholder="Malzeme Adı">
+  <input type="number" id="miktar" placeholder="Miktar" value="1">
+  <select id="makineSecim">
+    <option value="">Makine Seç - Opsiyonel</option>
+    <option>Başaran 1</option>
+    <option>Başaran 2</option>
+    <option>Başaran 3</option>
+    <option>BMW NUMALLIANCE</option>
+    <option>BJA NUMALLIANCE</option>
+  </select>
+  <button class="btn" onclick="malzemeEkle()">Ekle</button>
+</div>
+
+<div class="form" id="transferForm" style="display:none;">
+  <h3>Transfer Yap</h3>
+  <select id="transferMalzeme"></select>
+  <input type="number" id="transferMiktar" placeholder="Transfer Miktarı">
+  <button class="btn" onclick="transferYap()">Ana Depodan Makineye Transfer Et</button>
+</div>
+
+<div class="liste">
+  <h3 id="listeBaslik">Ana Depo Stokları</h3>
+  <div id="stokListesi"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
+  authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
+  projectId: "metalbaslikambar-94c7e",
+  storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
+  messagingSenderId: "313915466857",
+  appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+let aktifDepo = "Ana Depo";
+const KRITIK_STOK = 2;
+
+window.depoDegistir = function(depo){
+  aktifDepo = depo;
+  document.getElementById('btnAna').className = depo === "Ana Depo" ? "aktif" : "pasif";
+  document.getElementById('btnMakine').className = depo === "Makine Deposu" ? "aktif" : "pasif";
+  document.getElementById('listeBaslik').innerText = depo + " Stokları";
+  document.getElementById('transferForm').style.display = depo === "Ana Depo" ? "block" : "none";
+  stoklariListele();
+  bildirimleriKontrolEt();
+}
+
+async function stoklariListele(){
+  const liste = document.getElementById('stokListesi');
+  liste.innerHTML = "Yükleniyor...";
+  const q = query(collection(db, "stok"), where("depo", "==", aktifDepo));
+  const snap = await getDocs(q);
+  let html = "";
+  snap.forEach(doc => {
+    const d = doc.data();
+    const kritikClass = d.miktar <= KRITIK_STOK ? "kritik" : "";
+    html += `<div class="${kritikClass}" style="padding:10px; border-bottom:1px solid #eee;">
+      <b>${d.ad}</b> - Miktar: ${d.miktar} 
+      ${d.makine ? ' | Makine: ' + d.makine : ''}
+    </div>`;
+  });
+  liste.innerHTML = html || "Stok yok";
+  transferSelectDoldur();
+}
+
+async function transferSelectDoldur(){
+  const select = document.getElementById('transferMalzeme');
+  select.innerHTML = "";
+  const q = query(collection(db, "stok"), where("depo", "==", "Ana Depo"));
+  const snap = await getDocs(q);
+  snap.forEach(doc => {
+    const d = doc.data();
+    select.innerHTML += `<option value="${doc.id}">${d.ad} - Stok: ${d.miktar}</option>`;
+  });
+}
+
+window.malzemeEkle = async function(){
+  const ad = document.getElementById('malzemeAdi').value;
+  const miktar = parseInt(document.getElementById('miktar').value);
+  const makine = document.getElementById('makineSecim').value;
+  if(!ad || !miktar) return alert("Ad ve miktar gir");
+  
+  await addDoc(collection(db, "stok"), {
+    ad, miktar, depo: aktifDepo, makine: makine || null, kritik: KRITIK_STOK
+  });
+  alert("Eklendi");
+  stoklariListele(); bildirimleriKontrolEt();
+  document.getElementById('malzemeAdi').value = "";
+}
+
+window.transferYap = async function(){
+  const malzemeId = document.getElementById('transferMalzeme').value;
+  const miktar = parseInt(document.getElementById('transferMiktar').value);
+  if(!malzemeId || !miktar) return alert("Seçim yap");
+  
+  // Ana depodan düş
+  const anaRef = doc(db, "stok", malzemeId);
+  const anaSnap = await getDocs(query(collection(db, "stok"), where("__name__", "==", malzemeId)));
+  const anaData = anaSnap.docs[0].data();
+  if(anaData.miktar < miktar) return alert("Yeterli stok yok");
+  await updateDoc(anaRef, {miktar: anaData.miktar - miktar});
+  
+  // Makine deposuna ekle
+  await addDoc(collection(db, "stok"), {
+    ad: anaData.ad, miktar: miktar, depo: "Makine Deposu", makine: anaData.makine
+  });
+  
+  alert("Transfer yapıldı");
+  stoklariListele(); bildirimleriKontrolEt();
+}
+
+async function bildirimleriKontrolEt(){
+  const alan = document.getElementById('bildirimAlani');
+  alan.innerHTML = "";
+  const snap = await getDocs(collection(db, "stok"));
+  snap.forEach(doc => {
+    const d = doc.data();
+    if(d.miktar <= KRITIK_STOK){
+      alan.innerHTML += `<div class="bildirim">⚠️ KRİTİK: ${d.ad} - ${d.depo} - Kalan: ${d.miktar}</div>`;
+    }
+  });
+}
+
+stoklariListele(); bildirimleriKontrolEt();
+</script>
+</body>
+</html>
