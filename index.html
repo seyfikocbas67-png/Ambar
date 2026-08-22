@@ -54,5 +54,12 @@
         const querySnapshot = await q.get();
         
         if (!querySnapshot.empty) {
-          alert("Giriş başarılı!");
-          window.location.href = "panel.html
+          alert("Giriş başarılı! Panel yükleniyor...");
+        } else {
+          alert("Kullanıcı adı veya şifre hatalı!");
+        }
+      } catch (error) {
+        alert("BAĞLANTI HATASI: " + error.message);
+      }
+    }
+  </script>
