@@ -3,84 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metal Başlık Ambar - Admin</title>
+<title>Giriş - Metal Başlık</title>
 <style>
-* {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif;}
-body {height:100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); display:flex; justify-content:center; align-items:center;}
-.glass {width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2); padding: 40px 30px;}
-.logo {text-align:center; font-size:24px; font-weight:700; color:#fff; margin-bottom:30px; letter-spacing:2px;}
-.input-group input {width:100%; padding:15px; margin-bottom:20px; background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); border-radius:10px; color:#fff; font-size:16px; outline:none;}
-.input-group input::placeholder {color: rgba(255,255,255,0.6);}
-.btn {width:100%; padding:15px; background: linear-gradient(90deg, #00c6ff, #0072ff); border:none; border-radius:10px; color:#fff; font-size:18px; font-weight:600; cursor:pointer;}
-#mesaj {text-align:center; margin-top:15px; font-weight:600; height:20px; color:#fff;}
+body{background:#2563eb;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;font-family:sans-serif;}
+.login{background:white;padding:30px;border-radius:15px;width:90%;max-width:350px;box-shadow:0 10px 30px rgba(0,0,0,0.3);}
+h1{color:#2563eb;text-align:center;margin-bottom:20px;font-size:22px;}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;font-size:15px;}
+.sifre-kutu{position:relative;}
+.sifre-kutu button{position:absolute;right:5px;top:15px;background:none;border:none;cursor:pointer;font-size:18px;padding:5px;}
+button.giris{width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:16px;margin-top:10px;}
+button.giris:hover{background:#1d4ed8;}
+#mesaj{text-align:center;margin-top:10px;font-weight:bold;min-height:20px;}
+.iletisim{margin-top:20px;padding-top:15px;border-top:1px solid #eee;text-align:center;font-size:13px;color:#555;}
+.iletisim b{color:#2563eb;}
 </style>
 </head>
 <body>
+<div class="login">
+<h1>METAL BAŞLIK AMBAR</h1>
+<input id="kadi" placeholder="Kullanıcı Adı" value="admin">
 
-<div class="glass">
-  <div class="logo">METAL BAŞLIK AMBAR</div>
-  <div class="input-group">
-    <input type="text" id="kadi" placeholder="Kullanıcı Adı">
-  </div>
-  <div class="input-group">
-    <input type="password" id="sifre" placeholder="Şifre">
-  </div>
-  <button class="btn" id="girisyapBtn">GİRİŞ YAP</button>
-  <p id="mesaj"></p>
+<div class="sifre-kutu">
+  <input id="sifre" type="password" placeholder="Şifre" value="Tm12345">
+  <button type="button" onclick="sifreGoster()">👁️</button>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<button class="giris" onclick="giris()">GİRİŞ YAP</button>
+<div id="mesaj"></div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
-  authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
-  projectId: "metalbaslikambar-94c7e",
-  storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
-  messagingSenderId: "313915466857",
-  appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8",
-  measurementId: "G-X6YFMY86KX"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// BUTONA TIKLAMAYI BURADAN YAKALIYORUZ
-document.getElementById('girisyapBtn').addEventListener('click', girisYap);
-
-async function girisYap() {
-  const kadi = document.getElementById('kadi').value;
-  const sifre = document.getElementById('sifre').value;
-  const mesaj = document.getElementById('mesaj');
-  mesaj.innerText = "Kontrol ediliyor...";
-
-  try {
-    const ref = doc(db, "kullanicilar", "admin123");
-    const snap = await getDoc(ref);
-
-    if (snap.exists()) {
-      const data = snap.data();
-      if (data.kadi === kadi && data.sifre === sifre) {
-        mesaj.style.color = "#00ff88";
-        mesaj.innerText = "Başarılı! Yönlendiriliyor...";
-        setTimeout(() => { window.location.replace("panel.html"); }, 1200);
-      } else {
-        mesaj.style.color = "#ff4d4d";
-        mesaj.innerText = "Kullanıcı adı veya şifre hatalı";
-      }
-    } else {
-      mesaj.style.color = "#ff4d4d";
-      mesaj.innerText = "Kullanıcı bulunamadı";
-    }
-  } catch(e) {
-    mesaj.style.color = "#ff4d4d";
-    mesaj.innerText = "HATA: " + e.message;
-  }
-}
-</script>
-
-</body>
-</html>
-
-<div 
+<div class="iletisim">
+  <b>İletişim
