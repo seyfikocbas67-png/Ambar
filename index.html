@@ -3,8 +3,6 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Metal Başlık Malzeme Takip Programı</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 body{font-family:Tahoma; margin:0; background:#808080;}
 .ust{background:#2a5caa; color:#ffd700; text-align:center; padding:8px; font-weight:bold; font-size:15px;}
@@ -22,4 +20,31 @@ body{font-family:Tahoma; margin:0; background:#808080;}
 .tablo tr:hover{background:#ffff99;}
 .tablo tr.secili{background:#cfe2ff;}
 .resim-alani{width:100%; height:160px; border:2px dashed #999; background:#eee; display:flex; align-items:center; justify-content:center; margin-bottom:5px;}
-.resim-alani img{max-width:100
+.resim-alani img{max-width:100%; max-height:100%;}
+.btn{padding:6px 10px; margin:2px; cursor:pointer; border:1px outset #ccc; background:#c0c0c0;}
+.btn:hover{border:1px inset #ccc;}
+.btn-sil{background:#dc3545; color:white;}
+.stoklar{display:grid; grid-template-columns:1fr 1fr; gap:5px; text-align:center;}
+.stok-kutu{background:#eef; padding:8px; border:1px solid #999;}
+</style>
+</head>
+<body>
+
+<div class="ust">
+METAL BAŞLIK MALZEME TAKİP PROGRAMI<br>
+KULLANICI: <span id="kullaniciAdi">ADMIN</span>
+</div>
+
+<div id="login" style="padding:50px; text-align:center; background:white; width:300px; margin:50px auto; border:2px outset #fff;">
+<h3>GİRİŞ EKRANI</h3>
+Kullanıcı: <input id="kullanici" value="admin"><br><br>
+Şifre: <input type="password" id="sifre" value="1234"><br><br>
+<button onclick="giris()" class="btn" style="background:#2a5caa; color:#ffd700;">TAM</button>
+</div>
+
+<div id="main" style="display:none;">
+<div class="menu-box">
+<div class="menu-grid">
+<div class="kart sari" onclick="stokAc()"><img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"><br><b>Malzeme Listesi</b></div>
+<div class="kart" onclick="kullaniciAc()"><img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png"><br><b>Kullanıcı Yönetimi</b></div>
+<div class="kart" onclick="pdfRapor()"><img src="https://
