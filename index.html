@@ -9,7 +9,7 @@
 body {height:100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); display:flex; justify-content:center; align-items:center;}
 .glass {width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2); padding: 40px 30px;}
 .logo {text-align:center; font-size:24px; font-weight:700; color:#fff; margin-bottom:30px; letter-spacing:2px;}
-.input-group {position: relative; margin-bottom:20px;} /* Şifre gözü için position eklendi */
+.input-group {position: relative; margin-bottom:20px;}
 .input-group input {width:100%; padding:15px; background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); border-radius:10px; color:#fff; font-size:16px; outline:none;}
 .input-group input::placeholder {color: rgba(255,255,255,0.6);}
 .input-group .goz-btn {position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:20px;}
@@ -32,7 +32,6 @@ body {height:100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c536
   </div>
   <button class="btn" id="girisyapBtn">GİRİŞ YAP</button>
   <p id="mesaj"></p>
-
   <div class="iletisim">
     <b>İletişim:</b> 0555 186 1667
   </div>
@@ -55,16 +54,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ŞİFRE GÖSTER GİZLE FONKSİYONU EKLENDİ
 window.sifreGoster = function(){
   const sifreInput = document.getElementById("sifre");
   const btn = event.target;
   if(sifreInput.type === "password"){
-    sifreInput.type = "text";
-    btn.innerText = "🙈";
+    sifreInput.type = "text"; btn.innerText = "🙈";
   } else {
-    sifreInput.type = "password";
-    btn.innerText = "👁️";
+    sifreInput.type = "password"; btn.innerText = "👁️";
   }
 }
 
@@ -85,7 +81,7 @@ async function girisYap() {
       if (data.kadi === kadi && data.sifre === sifre) {
         mesaj.style.color = "#00ff88";
         mesaj.innerText = "Başarılı! Yönlendiriliyor...";
-        setTimeout(() => { window.location.replace("V11.2.html"); }, 1200); // BURASI ÖNEMLİ
+        setTimeout(() => { window.location.replace("panel.html"); }, 1200); // PANEL.HTML OLDU
       } else {
         mesaj.style.color = "#ff4d4d";
         mesaj.innerText = "Kullanıcı adı veya şifre hatalı";
