@@ -9,10 +9,14 @@
 body {height:100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); display:flex; justify-content:center; align-items:center;}
 .glass {width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2); padding: 40px 30px;}
 .logo {text-align:center; font-size:24px; font-weight:700; color:#fff; margin-bottom:30px; letter-spacing:2px;}
-.input-group input {width:100%; padding:15px; margin-bottom:20px; background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); border-radius:10px; color:#fff; font-size:16px; outline:none;}
+.input-group {position: relative; margin-bottom:20px;} /* Şifre gözü için position eklendi */
+.input-group input {width:100%; padding:15px; background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); border-radius:10px; color:#fff; font-size:16px; outline:none;}
 .input-group input::placeholder {color: rgba(255,255,255,0.6);}
-.btn {width:100%; padding:15px; background: linear-gradient(90deg, #00c6ff, #0072ff); border:none; border-radius:10px; color:#fff; font-size:18px; font-weight:600; cursor:pointer;}
+.input-group .goz-btn {position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:20px;}
+.btn {width:100%; padding:15px; background: linear-gradient(90deg, #00c6ff, #0072ff); border:none; border-radius:10px; color:#fff; font-size:18px; font-weight:600; cursor:pointer; margin-top:10px;}
 #mesaj {text-align:center; margin-top:15px; font-weight:600; height:20px; color:#fff;}
+.iletisim {margin-top:25px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.2); text-align:center; font-size:13px; color:rgba(255,255,255,0.8);}
+.iletisim b {color:#00c6ff;}
 </style>
 </head>
 <body>
@@ -20,13 +24,18 @@ body {height:100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c536
 <div class="glass">
   <div class="logo">METAL BAŞLIK AMBAR</div>
   <div class="input-group">
-    <input type="text" id="kadi" placeholder="Kullanıcı Adı">
+    <input type="text" id="kadi" placeholder="Kullanıcı Adı" value="admin123">
   </div>
   <div class="input-group">
-    <input type="password" id="sifre" placeholder="Şifre">
+    <input type="password" id="sifre" placeholder="Şifre" value="Tm12345">
+    <button type="button" class="goz-btn" onclick="sifreGoster()">👁️</button>
   </div>
   <button class="btn" id="girisyapBtn">GİRİŞ YAP</button>
   <p id="mesaj"></p>
+
+  <div class="iletisim">
+    <b>İletişim:</b> 0555 186 1667
+  </div>
 </div>
 
 <script type="module">
@@ -45,6 +54,19 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// ŞİFRE GÖSTER GİZLE FONKSİYONU EKLENDİ
+window.sifreGoster = function(){
+  const sifreInput = document.getElementById("sifre");
+  const btn = event.target;
+  if(sifreInput.type === "password"){
+    sifreInput.type = "text";
+    btn.innerText = "🙈";
+  } else {
+    sifreInput.type = "password";
+    btn.innerText = "👁️";
+  }
+}
 
 document.getElementById('girisyapBtn').addEventListener('click', girisYap);
 
@@ -80,14 +102,3 @@ async function girisYap() {
 </script>
 </body>
 </html>
-
-<div class="sifre-kutu">
-  <input id="sifre" type="password" placeholder="Şifre" value="Tm12345">
-  <button type="button" onclick="sifreGoster()">👁️</button>
-</div>
-
-<button class="giris" onclick="giris()">GİRİŞ YAP</button>
-<div id="mesaj"></div>
-
-<div class="iletisim">
-  <b>İletişim
