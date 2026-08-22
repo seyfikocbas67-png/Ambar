@@ -51,7 +51,10 @@ window.girisYap = async function() {
     const data = snap.data();
     if (data.kadi === kadi && data.sifre === sifre) {
       mesaj.style.color = "green";
-      mesaj.innerText = "Başarılı!";
+mesaj.innerText = "Başarılı! Yönlendiriliyor...";
+setTimeout(() => {
+  window.location.href = "panel.html";
+}, 1500);;
     } else {
       mesaj.style.color = "red";
       mesaj.innerText = "Kullanıcı adı veya şifre hatalı";
