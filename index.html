@@ -3,27 +3,28 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PRO AMBAR TAKİP</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 body{font-family:'Segoe UI'; margin:0; background:#f0f0f0;}
 .header{background:#0d6efd; color:white; padding:10px; font-size:18px; font-weight:bold;}
-.main{display:flex; height:90vh;}
-.sol{width:60%; background:white; padding:10px; overflow:auto;}
-.sag{width:40%; background:#eef2f7; padding:10px; border-left:2px solid #ccc;}
-input,select{padding:5px; margin:3px; border:1px solid #ccc; border-radius:4px;}
-.btn{padding:7px 12px; margin:3px; border:none; border-radius:4px; cursor:pointer; color:white;}
-.btn-ekle{background:#198754;} .btn-sil{background:#dc3545;} .btn-pdf{background:#0d6efd;}
+.main{display:flex; flex-direction:column; height:90vh;}
+@media(min-width: 768px){.main{flex-direction:row;}}
+.sol{width:100%; background:white; padding:10px; overflow:auto;}
+@media(min-width: 768px){.sol{width:60%;}}
+.sag{width:100%; background:#eef2f7; padding:10px;}
+@media(min-width: 768px){.sag{width:40%; border-left:2px solid #ccc;}}
+input,select{padding:6px; margin:3px; border:1px solid #ccc; border-radius:4px; width:90%;}
+.btn{padding:8px 12px; margin:3px; border:none; border-radius:4px; cursor:pointer; color:white;}
+.btn-ekle{background:#198754;}.btn-sil{background:#dc3545;}
 .tablo{width:100%; border-collapse:collapse; font-size:13px;}
-.tablo th{background:#0d6efd; color:white; padding:8px; position:sticky; top:0;}
+.tablo th{background:#0d6efd; color:white; padding:8px;}
 .tablo td{border:1px solid #ddd; padding:6px; cursor:pointer;}
 .tablo tr:hover{background:#e7f1ff;}
 .tablo tr.secili{background:#cfe2ff;}
-.resim-alani{width:100%; height:250px; border:2px dashed #ccc; background:white; display:flex; align-items:center; justify-content:center; margin-bottom:10px;}
+.resim-alani{width:100%; height:200px; border:2px dashed #ccc; background:white; display:flex; align-items:center; justify-content:center; margin-bottom:10px;}
 .resim-alani img{max-width:100%; max-height:100%;}
 .stoklar{display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; text-align:center;}
 .stok-kutu{background:white; padding:10px; border-radius:5px; border:1px solid #ccc;}
-.stok-kutu b{font-size:20px;}
+.stok-kutu b{font-size:18px;}
 </style>
 </head>
 <body>
@@ -38,14 +39,12 @@ input,select{padding:5px; margin:3px; border:1px solid #ccc; border-radius:4px;}
 <div class="sol">
 <h3>Malzeme Listesi <input id="arama" placeholder="Ara..." onkeyup="listele()"></h3>
 <table class="tablo" id="tablo">
-<thead><tr><th>Kod</th><th>Malzeme Adı</th><th>Depo</th><th>Makine</th><th>Elimde</th><th>Toplam</th></tr></thead>
+<thead><tr><th>Kod</th><th>Malzeme Adı</th><th>Depo</th><th>Makine</th><th>Elimde</th></tr></thead>
 <tbody></tbody>
 </table>
 <br>
 <button class="btn btn-ekle" onclick="yeniUrun()">+ Yeni Malzeme</button>
 <button class="btn btn-sil" onclick="silUrun()">Seçileni Sil</button>
-<button class="btn btn-pdf" onclick="excelCikis()">Excel Aktar</button>
-<button class="btn btn-pdf" onclick="pdfCikis()">PDF Rapor</button>
 </div>
 
 <div class="sag" id="detay">
@@ -62,30 +61,4 @@ input,select{padding:5px; margin:3px; border:1px solid #ccc; border-radius:4px;}
 </div><br>
 <h4>Stok İşlemi</h4>
 <select id="tur">
-<option value="depoya_gir">Depoya Giriş</option>
-<option value="makineye_gir">Depodan Makineye</option>
-<option value="eldeye_ver">Depodan Elime</option>
-<option value="kullanildi">Elimdekini Kullan</option>
-</select>
-<input id="miktar" type="number" value="1" style="width:60px">
-<button class="btn btn-ekle" onclick="islemYap()">Kaydet</button>
-</div>
-</div>
-
-<script>
-const { jsPDF } = window.jspdf;
-let seciliIndex = 0;
-let urunler = JSON.parse(localStorage.getItem('pro_ambar_urunler')) || [];
-let kullanicilar = JSON.parse(localStorage.getItem('kullanicilar')) || [{kadi:"admin", sifre:"1234"}];
-
-if(urunler.length==0){
-urunler.push({kod:"YP-001", ad:"RULMAN 6204", birim:"ADET", min:5, makine:2, depo:10, elde:1, resim:""});
-}
-
-function kaydet(){localStorage.setItem('pro_ambar_urunler',JSON.stringify(urunler));}
-function giris(){if(kullanici.value=="admin" && sifre.value=="1234"){document.getElementById('login').style.display='none'; document.getElementById('main').style.display='flex'; listele(); sec(0);} else alert("Hatalı")}
-
-function listele(){
-let tbody = document.querySelector("#tablo tbody"); tbody.innerHTML="";
-let ara = arama.value.toLowerCase();
-urunler.filter(u=>u.k
+<option value="depoya_gir">Dep
