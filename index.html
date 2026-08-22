@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metal Başlık Malzeme Takip</title>
+    <title>Metal Başlık V10 Bulut</title>
+    
+    <!-- Firebase SDK (Compat Sürümü) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
     <style>
         :root {
             --primary-color: #2563eb;
             --secondary-color: #1e40af;
             --accent-color: #f59e0b;
-            --bg-color: #0f172a;
-            --card-bg: rgba(255, 255, 255, 0.95);
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --card-bg: rgba(255, 255, 255, 0.96);
             --text-color: #1e293b;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 10px; }
+        body { background: var(--bg-gradient); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 10px; }
         
-        .app-header { background: linear-gradient(90deg, #f59e0b, #d97706); color: white; width: 100%; max-width: 600px; padding: 12px; text-align: center; font-weight: bold; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 1.1rem; }
+        .app-header { background: linear-gradient(90deg, #f59e0b, #d97706); color: white; width: 100%; max-width: 600px; padding: 12px; text-align: center; font-weight: bold; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 1.1rem; }
         
-        /* 3D Giriş Ekranı */
-        #login-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 75vh;
-        }
+        /* 3D Görsellik Verilmiş Giriş Ekranı */
+        #login-screen { display: flex; justify-content: center; align-items: center; width: 100%; height: 75vh; }
         .login-card {
             background: var(--card-bg);
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 15px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(245, 158, 11, 0.25);
             width: 100%;
-            max-width: 400px;
-            transform: perspective(1000px) rotateX(2deg);
-            transition: transform 0.3s ease;
+            max-width: 380px;
+            transform: perspective(1000px) rotateX(3deg);
+            transition: all 0.3s ease;
         }
         .login-card:hover { transform: perspective(1000px) rotateX(0deg) scale(1.02); }
-        .login-card h2 { text-align: center; margin-bottom: 20px; color: #0f172a; font-size: 1.8rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .login-card h2 { text-align: center; margin-bottom: 20px; color: #0f172a; font-size: 1.8rem; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #475569; }
         .form-group input { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
@@ -49,52 +48,54 @@
         /* Ana Menü */
         #main-menu { display: none; width: 100%; max-width: 600px; }
         .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
-        .card { background: var(--card-bg); padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: transform 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; border: 1px solid rgba(255,255,255,0.3); }
-        .card:hover { transform: translateY(-3px); background: #ffffff; }
-        .card span.icon { font-size: 2.5rem; }
+        .card { background: var(--card-bg); padding: 22px 15px; border-radius: 12px; text-align: center; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.25); transition: transform 0.2s, background 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; border: 1px solid rgba(255,255,255,0.4); }
+        .card:hover { transform: translateY(-4px); background: #ffffff; }
+        .card span.icon { font-size: 2.2rem; }
         .card h3 { font-size: 1rem; color: #1e293b; font-weight: 600; }
 
         /* Tam Sayfa Görünümler */
-        .full-page-view { display: none; width: 100%; max-width: 600px; background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; margin-top: 10px; }
-        .back-btn { position: absolute; top: 15px; right: 15px; background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .full-page-view { display: none; width: 100%; max-width: 600px; background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); position: relative; margin-top: 5px; }
+        .back-btn { position: absolute; top: 15px; right: 15px; background: #ef4444; color: white; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
         .back-btn:hover { background: #dc2626; }
         
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
-        th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
-        th { background: #f1f5f9; color: #334155; }
+        th, td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; }
+        th { background: #f1f5f9; color: #334155; font-weight: 700; }
         .input-row { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-        .input-row input { flex: 1; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; min-width: 110px; }
-        .btn-action { background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .btn-danger { background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
-        .search-box { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 10px; }
+        .input-row input { flex: 1; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; min-width: 110px; }
+        .btn-action { background: #10b981; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-action:hover { background: #059669; }
+        .btn-danger { background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .btn-danger:hover { background: #dc2626; }
+        .search-box { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="app-header" id="header-title">METAL BAŞLIK AMBAR TAKİP</div>
+    <div class="app-header" id="header-title">METAL BAŞLIK AMBAR TAKİP V10</div>
 
-    <!-- GİRİŞ EKRANI -->
+    <!-- 3D GİRİŞ EKRANI -->
     <div id="login-screen">
         <div class="login-card">
             <h2>GİRİŞ EKRANI</h2>
             <div class="form-group">
                 <label>Kullanıcı Adı:</label>
-                <input type="text" id="login-user" placeholder="Kullanıcı adınız">
+                <input type="text" id="login-user" placeholder="admin" value="admin">
             </div>
             <div class="form-group">
                 <label>Şifre:</label>
-                <input type="password" id="login-pass" placeholder="Şifreniz">
+                <input type="password" id="login-pass" placeholder="****" value="1234">
             </div>
             <button class="btn-primary" onclick="girisYap()">GİRİŞ YAP</button>
             <div class="support-link">
-                <a href="mailto:destek@ambartakip.com?subject=Hata%20Bildirimi">Destek / Hata Bildirimi</a>
+                <a href="mailto:destek@ambartakip.com?subject=Hata%20Bildirimi">İletişim / Hata Bildirimi</a>
             </div>
         </div>
     </div>
 
     <!-- ANA MENÜ -->
     <div id="main-menu">
-        <div style="margin-bottom: 10px; font-weight: bold; color: #e2e8f0; text-align: center;" id="welcome-user">KULLANICI: ADMIN</div>
+        <div style="margin-bottom: 12px; font-weight: bold; color: #e2e8f0; text-align: center; font-size: 1.1rem;" id="welcome-user">KULLANICI: ADMIN</div>
         <div class="menu-grid">
             <div class="card" onclick="openMalzemeListesi()">
                 <span class="icon">📦</span>
@@ -102,30 +103,22 @@
             </div>
             <div class="card" onclick="openKullaniciYonetimi()">
                 <span class="icon">👤</span>
-                <h3>Kullanıcılar</h3>
+                <h3>Kullanıcı Yönetimi</h3>
             </div>
-            <div class="card" onclick="alert('PDF Rapor özelliği hazırlanıyor.')">
-                <span class="icon">📄</span>
-                <h3>PDF Rapor</h3>
-            </div>
-            <div class="card" onclick="alert('Excel Aktar özelliği hazırlanıyor.')">
-                <span class="icon">📊</span>
-                <h3>Excel Aktar</h3>
-            </div>
-            <div class="card" onclick="openMalzemeListesi()">
-                <span class="icon">💾</span>
-                <h3>Kaydet / Ekle</h3>
+            <div class="card" onclick="alert('Firebase Bulut Senkronizasyonu Aktif ✓')">
+                <span class="icon">☁️</span>
+                <h3>Bulut Durumu</h3>
             </div>
             <div class="card" onclick="cikisYap()">
                 <span class="icon">🚪</span>
-                <h3>Çıkış</h3>
+                <h3>Çıkış Yap</h3>
             </div>
         </div>
     </div>
 
     <!-- MALZEME LİSTESİ (Tam Sayfa) -->
     <div id="malzeme-view" class="full-page-view">
-        <button class="back-btn" onclick="anaMenuyeDon()">Çıkış / Geri</button>
+        <button class="back-btn" onclick="anaMenuyeDon()">← Çıkış / Geri</button>
         <h3 style="margin-bottom: 15px; color: #1e293b;">YEDEK MALZEME LİSTESİ</h3>
         <input type="text" class="search-box" id="malzeme-search" placeholder="Malzeme ara..." onkeyup="filtreleMalzeme()">
         <div style="overflow-x: auto;">
@@ -135,8 +128,6 @@
                         <th>Kod</th>
                         <th>Adı</th>
                         <th>Depo</th>
-                        <th>Makine</th>
-                        <th>Toplam</th>
                         <th>İşlem</th>
                     </tr>
                 </thead>
@@ -144,17 +135,16 @@
             </table>
         </div>
         <div class="input-row" style="margin-top: 20px;">
-            <input type="text" id="yeni-kod" placeholder="Kod">
+            <input type="text" id="yeni-kod" placeholder="Kod (örn: MB-01)">
             <input type="text" id="yeni-ad" placeholder="Malzeme Adı">
-            <input type="number" id="yeni-depo" placeholder="Depo" value="0">
-            <input type="number" id="yeni-makine" placeholder="Makine" value="0">
+            <input type="number" id="yeni-depo" placeholder="Depo Adet" value="0">
             <button class="btn-action" onclick="malzemeEkle()">Ekle</button>
         </div>
     </div>
 
     <!-- KULLANICI YÖNETİMİ (Tam Sayfa) -->
     <div id="kullanici-view" class="full-page-view">
-        <button class="back-btn" onclick="anaMenuyeDon()">Çıkış / Geri</button>
+        <button class="back-btn" onclick="anaMenuyeDon()">← Çıkış / Geri</button>
         <h3 style="margin-bottom: 15px; color: #1e293b;">KULLANICI YÖNETİMİ</h3>
         <div style="overflow-x: auto;">
             <table>
@@ -169,34 +159,58 @@
             </table>
         </div>
         <div class="input-row" style="margin-top: 20px;">
-            <input type="text" id="yeni-kul-adi" placeholder="Kullanıcı Adı">
+            <input type="text" id="yeni-kul-adi" placeholder="Yeni Kullanıcı Adı">
             <input type="password" id="yeni-kul-sifre" placeholder="Şifre">
             <button class="btn-action" onclick="kullaniciEkle()">Kullanıcı Ekle</button>
         </div>
     </div>
 
     <script>
-        if (!localStorage.getItem('metal_malzemeler')) {
-            localStorage.setItem('metal_malzemeler', JSON.stringify([
-                { kod: 'MB-001', ad: 'RULMAN 6204', depo: 10, makine: 2 },
-                { kod: 'MB-2', ad: 'YENİ MALZEME', depo: 0, makine: 0 }
-            ]));
-        }
+        // FIREBASE YAPILANDIRMASI
+        const firebaseConfig = {
+            apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
+            authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
+            projectId: "metalbaslikambar-94c7e",
+            storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
+            messagingSenderId: "313915466857",
+            appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8",
+            measurementId: "G-X6YFMY86KX"
+        };
 
-        if (!localStorage.getItem('metal_kullanicilar')) {
-            localStorage.setItem('metal_kullanicilar', JSON.stringify([
-                { kadi: 'admin', sifre: '1234' }
-            ]));
-        }
+        // Firebase Başlat
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
+        let urunler = [];
+        let kullanicilar = [];
         let aktifKullanici = '';
 
-        function girisYap() {
-            let kadi = document.getElementById('login-user').value.trim();
-            let sifre = document.getElementById('login-pass').value.trim();
-            let users = JSON.parse(localStorage.getItem('metal_kullanicilar'));
+        // Verileri Firebase Firestore üzerinden yükleme
+        async function verileriYukle() {
+            const kSnap = await db.collection("kullanicilar").get();
+            kullanicilar = [];
+            kSnap.forEach(doc => kullanicilar.push({ id: doc.id, ...doc.data() }));
 
-            let bul = users.find(u => u.kadi === kadi && u.sifre === sifre);
+            if (kullanicilar.length === 0) {
+                const newAdmin = await db.collection("kullanicilar").add({ kadi: "admin", sifre: "1234" });
+                kullanicilar.push({ id: newAdmin.id, kadi: "admin", sifre: "1234" });
+            }
+
+            const uSnap = await db.collection("urunler").get();
+            urunler = [];
+            uSnap.forEach(doc => urunler.push({ id: doc.id, ...doc.data() }));
+        }
+
+        verileriYukle();
+
+        async function girisYap() {
+            const kadiInput = document.getElementById('login-user').value.trim();
+            const sifreInput = document.getElementById('login-pass').value.trim();
+
+            await verileriYukle();
+
+            const bul = kullanicilar.find(u => u.kadi === kadiInput && u.sifre === sifreInput);
+
             if (bul) {
                 aktifKullanici = bul.kadi;
                 document.getElementById('login-screen').style.display = 'none';
@@ -211,8 +225,6 @@
             aktifKullanici = '';
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('login-screen').style.display = 'flex';
-            document.getElementById('login-user').value = '';
-            document.getElementById('login-pass').value = '';
         }
 
         function anaMenuyeDon() {
@@ -221,115 +233,111 @@
             document.getElementById('main-menu').style.display = 'block';
         }
 
-        function openMalzemeListesi() {
+        async function openMalzemeListesi() {
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('malzeme-view').style.display = 'block';
+            await verileriYukle();
             listeleMalzeme();
         }
 
-        function openKullaniciYonetimi() {
+        async function openKullaniciYonetimi() {
             document.getElementById('main-menu').style.display = 'none';
             document.getElementById('kullanici-view').style.display = 'block';
+            await verileriYukle();
             listeleKullanici();
         }
 
         function listeleMalzeme(filtre = '') {
-            let list = JSON.parse(localStorage.getItem('metal_malzemeler'));
-            let tbody = document.getElementById('malzeme-tbody');
+            const tbody = document.getElementById('malzeme-tbody');
             tbody.innerHTML = '';
-            list.forEach((item, index) => {
-                if (item.ad.toLowerCase().includes(filtre.toLowerCase()) || item.kod.toLowerCase().includes(filtre.toLowerCase())) {
-                    let toplam = Number(item.depo) + Number(item.makine);
+            
+            urunler.forEach(u => {
+                const kod = u.kod || '';
+                const ad = u.ad || '';
+                if (ad.toLowerCase().includes(filtre.toLowerCase()) || kod.toLowerCase().includes(filtre.toLowerCase())) {
                     tbody.innerHTML += `<tr>
-                        <td>${item.kod}</td>
-                        <td>${item.ad}</td>
-                        <td>${item.depo}</td>
-                        <td>${item.makine}</td>
-                        <td><b>${toplam}</b></td>
-                        <td><button class="btn-danger" onclick="malzemeSil(${index})">Sil</button></td>
+                        <td>${kod}</td>
+                        <td>${ad}</td>
+                        <td><b>${u.depo || 0}</b></td>
+                        <td><button class="btn-danger" onclick="malzemeSil('${u.id}')">Sil</button></td>
                     </tr>`;
                 }
             });
         }
 
         function filtreleMalzeme() {
-            let val = document.getElementById('malzeme-search').value;
+            const val = document.getElementById('malzeme-search').value;
             listeleMalzeme(val);
         }
 
-        function malzemeEkle() {
-            let kod = document.getElementById('yeni-kod').value.trim();
-            let ad = document.getElementById('yeni-ad').value.trim();
-            let depo = document.getElementById('yeni-depo').value;
-            let makine = document.getElementById('yeni-makine').value;
+        async function malzemeEkle() {
+            const kod = document.getElementById('yeni-kod').value.trim();
+            const ad = document.getElementById('yeni-ad').value.trim();
+            const depo = parseFloat(document.getElementById('yeni-depo').value) || 0;
 
             if (!kod || !ad) {
-                alert('Lütfen kod ve malzeme adı giriniz.');
+                alert('Lütfen malzeme kodu ve adını doldurun.');
                 return;
             }
 
-            let list = JSON.parse(localStorage.getItem('metal_malzemeler'));
-            list.push({ kod, ad, depo: Number(depo), makine: Number(makine) });
-            localStorage.setItem('metal_malzemeler', JSON.stringify(list));
-
+            await db.collection("urunler").add({ kod, ad, depo });
             document.getElementById('yeni-kod').value = '';
             document.getElementById('yeni-ad').value = '';
             document.getElementById('yeni-depo').value = '0';
-            document.getElementById('yeni-makine').value = '0';
+            
+            await verileriYukle();
             listeleMalzeme();
-            alert('Malzeme kaydedildi!');
+            alert('Malzeme eklendi!');
         }
 
-        function malzemeSil(index) {
-            if (confirm('Silmek istediğinize emin misiniz?')) {
-                let list = JSON.parse(localStorage.getItem('metal_malzemeler'));
-                list.splice(index, 1);
-                localStorage.setItem('metal_malzemeler', JSON.stringify(list));
+        async function malzemeSil(id) {
+            if (confirm('Bu malzemeyi silmek istediğinize emin misiniz?')) {
+                await db.collection("urunler").doc(id).delete();
+                await verileriYukle();
                 listeleMalzeme();
             }
         }
 
         function listeleKullanici() {
-            let users = JSON.parse(localStorage.getItem('metal_kullanicilar'));
-            let tbody = document.getElementById('kullanici-tbody');
+            const tbody = document.getElementById('kullanici-tbody');
             tbody.innerHTML = '';
-            users.forEach((u, index) => {
+            
+            kullanicilar.forEach(k => {
                 tbody.innerHTML += `<tr>
-                    <td>${u.kadi}</td>
+                    <td>${k.kadi}</td>
                     <td>••••</td>
-                    <td>${u.kadi !== 'admin' ? `<button class="btn-danger" onclick="kullaniciSil(${index})">Sil</button>` : 'Sabit'}</td>
+                    <td>${k.kadi !== 'admin' ? `<button class="btn-danger" onclick="kullaniciSil('${k.id}')">Sil</button>` : 'Sabit'}</td>
                 </tr>`;
             });
         }
 
-        function kullaniciEkle() {
-            let kadi = document.getElementById('yeni-kul-adi').value.trim();
-            let sifre = document.getElementById('yeni-kul-sifre').value.trim();
+        async function kullaniciEkle() {
+            const kadi = document.getElementById('yeni-kul-adi').value.trim();
+            const sifre = document.getElementById('yeni-kul-sifre').value.trim();
 
             if (!kadi || !sifre) {
-                alert('Kullanıcı adı ve şifre boş olamaz.');
+                alert('Kullanıcı adı ve şifre boş bırakılamaz.');
                 return;
             }
 
-            let users = JSON.parse(localStorage.getItem('metal_kullanicilar'));
-            if (users.some(u => u.kadi === kadi)) {
-                alert('Bu kullanıcı adı zaten var!');
+            if (kullanicilar.some(u => u.kadi === kadi)) {
+                alert('Bu kullanıcı adı zaten mevcut!');
                 return;
             }
 
-            users.push({ kadi, sifre });
-            localStorage.setItem('metal_kullanicilar', JSON.stringify(users));
+            await db.collection("kullanicilar").add({ kadi, sifre });
             document.getElementById('yeni-kul-adi').value = '';
             document.getElementById('yeni-kul-sifre').value = '';
+            
+            await verileriYukle();
             listeleKullanici();
-            alert('Kullanıcı eklendi!');
+            alert('Yeni kullanıcı eklendi!');
         }
 
-        function kullaniciSil(index) {
+        async function kullaniciSil(id) {
             if (confirm('Kullanıcıyı silmek istediğinize emin misiniz?')) {
-                let users = JSON.parse(localStorage.getItem('metal_kullanicilar'));
-                users.splice(index, 1);
-                localStorage.setItem('metal_kullanicilar', JSON.stringify(users));
+                await db.collection("kullanicilar").doc(id).delete();
+                await verileriYukle();
                 listeleKullanici();
             }
         }
