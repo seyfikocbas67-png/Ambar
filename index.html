@@ -1,63 +1,77 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Ambar Giriş</title>
-  <style>
-    body { font-family: Arial; background: #f2f2f2; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-    .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px #ccc; width: 300px; }
-    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-    button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
-    button:hover { background: #218838; }
-    h2 { text-align: center; margin-bottom: 20px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giriş</title>
+<style>
+body{font-family:Arial;display:flex;justify-content:center;align-items:center;height:100vh;background:#f0f0f0;margin:0}
+.kutu{background:white;padding:30px;border-radius:10px;box-shadow:0 0 15px rgba(0,0,0,0.1);width:300px}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:5px;box-sizing:border-box}
+button{width:100%;padding:12px;background:#007bff;color:white;border:none;border-radius:5px;cursor:pointer;font-size:16px}
+button:hover{background:#0056b3}
+#mesaj{text-align:center;margin-top:10px;font-weight:bold}
+</style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>Ambar Giriş</h2>
-    <input type="text" id="username" placeholder="Kullanıcı Adı">
-    <input type="password" id="password" placeholder="Şifre">
-    <button onclick="login()">Giriş Yap</button>
-  </div>
 
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+<div class="kutu">
+<h2 style="text-align:center">Yönetici Girişi</h2>
+<input type="text" id="kadi" placeholder="Kullanıcı Adı">
+<input type="password" id="sifre" placeholder="Şifre">
+<button onclick="girisYap()">Giriş Yap</button>
+<p id="mesaj"></p>
+</div>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBwUM5k1Yy5J3nScnPQLF",
-      authDomain: "metalbasliambar.firebaseapp.com",
-      projectId: "metalbasliambar",
-      storageBucket: "metalbasliambar.appspot.com",
-      messagingSenderId: "112168412666",
-      appId: "1:112168412666:web:88521a971d06b5d941866"
-    };
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+// SENİN GERÇEK BİLGİLERİN
+const firebaseConfig = {
+  apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
+  authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
+  projectId: "metalbaslikambar-94c7e",
+  storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
+  messagingSenderId: "313915466857",
+  appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8",
+  measurementId: "G-X6YFMY86KX"
+};
 
-    async function login() {
-      const kadi = document.getElementById("username").value;
-      const sifre = document.getElementById("password").value;
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
 
-      if(kadi == "" || sifre == "") {
-        alert("Kullanıcı adı ve şifre boş olamaz!");
-        return;
+window.girisYap = async function() {
+  const kadi = document.getElementById('kadi').value;
+  const sifre = document.getElementById('sifre').value;
+  const mesaj = document.getElementById('mesaj');
+  mesaj.innerText = "Kontrol ediliyor...";
+
+  try {
+    const ref = doc(db, "kullanicilar", "admin123");
+    const snap = await getDoc(ref);
+
+    if (snap.exists()) {
+      const data = snap.data();
+      if (data.kadi === kadi && data.sifre === sifre) {
+        mesaj.style.color = "green";
+        mesaj.innerText = "Giriş başarılı!";
+      } else {
+        mesaj.style.color = "red";
+        mesaj.innerText = "Kullanıcı adı veya şifre hatalı";
       }
-
-      try {
-        const q = db.collection("kullanicilar").where("kadi", "==", kadi).where("sifre", "==", sifre);
-        const querySnapshot = await q.get();
-        
-        if (!querySnapshot.empty) {
-          alert("Giriş başarılı! Panel yükleniyor...");
-        } else {
-          alert("Kullanıcı adı veya şifre hatalı!");
-        }
-      } catch (error) {
-        alert("BAĞLANTI HATASI: " + error.message);
-      }
+    } else {
+      mesaj.style.color = "red";
+      mesaj.innerText = "Kullanıcı bulunamadı";
     }
-  </script>
+  } catch (e) {
+    mesaj.style.color = "red";
+    mesaj.innerText = "Hata: " + e.message;
+  }
+}
+</script>
+
 </body>
 </html>
