@@ -2,63 +2,40 @@
 <html lang="tr">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRO AMBAR TAKİP</title>
+<title>Bilgem Ambar Programı</title>
 <style>
-body{font-family:'Segoe UI'; margin:0; background:#f0f0f0;}
-.header{background:#0d6efd; color:white; padding:10px; font-size:18px; font-weight:bold;}
-.main{display:flex; flex-direction:column; height:90vh;}
-@media(min-width: 768px){.main{flex-direction:row;}}
-.sol{width:100%; background:white; padding:10px; overflow:auto;}
-@media(min-width: 768px){.sol{width:60%;}}
-.sag{width:100%; background:#eef2f7; padding:10px;}
-@media(min-width: 768px){.sag{width:40%; border-left:2px solid #ccc;}}
-input,select{padding:6px; margin:3px; border:1px solid #ccc; border-radius:4px; width:90%;}
-.btn{padding:8px 12px; margin:3px; border:none; border-radius:4px; cursor:pointer; color:white;}
-.btn-ekle{background:#198754;}.btn-sil{background:#dc3545;}
-.tablo{width:100%; border-collapse:collapse; font-size:13px;}
-.tablo th{background:#0d6efd; color:white; padding:8px;}
-.tablo td{border:1px solid #ddd; padding:6px; cursor:pointer;}
-.tablo tr:hover{background:#e7f1ff;}
-.tablo tr.secili{background:#cfe2ff;}
-.resim-alani{width:100%; height:200px; border:2px dashed #ccc; background:white; display:flex; align-items:center; justify-content:center; margin-bottom:10px;}
-.resim-alani img{max-width:100%; max-height:100%;}
-.stoklar{display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px; text-align:center;}
-.stok-kutu{background:white; padding:10px; border-radius:5px; border:1px solid #ccc;}
-.stok-kutu b{font-size:18px;}
+body{font-family:'Segoe UI'; margin:0; background:#808080;}
+.ust{background:#2a5caa; color:#ffd700; text-align:center; padding:10px; font-weight:bold;}
+.ust h2{margin:3px;}
+.menu-box{width:95%; max-width:800px; margin:20px auto; background:#c0c0c0; padding:15px; border:3px outset #fff;}
+.menu-grid{display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:10px;}
+.kart{background:#fff; border:2px outset #fff; text-align:center; padding:15px 5px; cursor:pointer; height:120px;}
+.kart:hover{border:2px inset #fff; background:#ffff99;}
+.kart img{width:48px; height:48px; margin-bottom:5px;}
+.kart b{color:#000; font-size:14px;}
+.kart.sari{background:#ffff99;}
+.alt{color:#ffd700; text-align:center; padding:10px; font-weight:bold;}
+#main{display:none;}
+.resim-modal{position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:none; align-items:center; justify-content:center;}
+.resim-modal img{max-width:90%; max-height:90%;}
 </style>
 </head>
 <body>
-<div class="header">🏭 PROFESYONEL AMBAR TAKİP SİSTEMİ</div>
 
-<div id="login" style="padding:50px; text-align:center;">
-<input id="kullanici" placeholder="Kullanıcı: admin"><br><br>
-<input type="password" id="sifre" placeholder="Şifre: 1234"><br><br>
-<button class="btn btn-ekle" onclick="giris()">GİRİŞ</button></div>
-
-<div id="main" style="display:none" class="main">
-<div class="sol">
-<h3>Malzeme Listesi <input id="arama" placeholder="Ara..." onkeyup="listele()"></h3>
-<table class="tablo" id="tablo">
-<thead><tr><th>Kod</th><th>Malzeme Adı</th><th>Depo</th><th>Makine</th><th>Elimde</th></tr></thead>
-<tbody></tbody>
-</table>
-<br>
-<button class="btn btn-ekle" onclick="yeniUrun()">+ Yeni Malzeme</button>
-<button class="btn btn-sil" onclick="silUrun()">Seçileni Sil</button>
+<div class="ust">
+<h2>Bilgem Ambar Programı</h2>
+www.bilgem.com<br>
+<span id="kullaniciAdi">Ali BÜYÜK</span>
 </div>
 
-<div class="sag" id="detay">
-<h3>Malzeme Detayı</h3>
-<div class="resim-alani" id="resimAlani">Resim Yok<br><input type="file" id="resimYukle" accept="image/*" onchange="resimEkle(event)"></div>
-<label>Kod:</label><input id="kod"><br>
-<label>Adı:</label><input id="ad"><br>
-<label>Birim:</label><select id="birim"><option>ADET</option><option>KG</option><option>MT</option></select><br>
-<label>Kritik Seviye:</label><input id="min" type="number"><br><hr>
-<div class="stoklar">
-<div class="stok-kutu">MAKİNE<br><b id="makine">0</b></div>
-<div class="stok-kutu">DEPO<br><b id="depo">0</b></div>
-<div class="stok-kutu">ELİMDE<br><b id="elde">0</b></div>
-</div><br>
-<h4>Stok İşlemi</h4>
-<select id="tur">
-<option value="depoya_gir">Dep
+<div id="login" style="padding:50px; text-align:center;">
+<input id="kullanici" placeholder="Kullanıcı: admin" style="padding:8px"><br><br>
+<input type="password" id="sifre" placeholder="Şifre: 1234" style="padding:8px"><br><br>
+<button onclick="giris()" style="padding:10px 20px; background:#2a5caa; color:#ffd700; border:none;">GİRİŞ</button>
+</div>
+
+<div id="main">
+<div class="menu-box">
+<div class="menu-grid">
+<div class="kart" onclick="alert('Parça Satış ekranı açılacak')"><img src="https://cdn-icons-png.flaticon.com/512/8913/8913996.png"><br><b>Parça Sat</b></div>
+<div class="kart sari" onclick="stokAc
