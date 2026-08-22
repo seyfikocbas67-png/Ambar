@@ -1,217 +1,62 @@
 <!DOCTYPE html>
 <html lang="tr">
-seyfikocbas67-pngAdd a comment on line R86
-Add diff comment
-Markdown input: edit mode selected.
-Write
-Preview
-Leave a comment
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metal Başlık V11.2 Pro</title>
+<title>Metal Başlık Ambar V11.2</title>
 <style>
-:root{--mavi:#2563eb;--sari:#facc15;--arka:#f1f5f9;--kart:#fff;--yazi:#1e293b;--kirmizi:#ef4444;--yesil:#22c55e;}
-body.dark{--arka:#0f172a;--kart:#1e293b;--yazi:#f1f5f9;}
-*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif;}
-body{background:var(--arka);color:var(--yazi);transition:0.3s;}
-.ust{display:flex;justify-content:space-between;align-items:center;background:var(--mavi);color:white;padding:12px 20px;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,0.2);}
-.ust h1{font-size:16px;}.ust.btn-ust{background:var(--sari);border:none;padding:8px 12px;border-radius:8px;font-weight:bold;cursor:pointer;color:#000;}
-.container{max-width:1200px;margin:15px auto;padding:10px;}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:15px;}
-.stat-kart{background:var(--kart);padding:18px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-.stat-kart h3{font-size:12px;opacity:0.7;margin-bottom:5px;}.stat-kart p{font-size:26px;font-weight:bold;color:var(--mavi);}
-.filtre{display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;}
-.filtre select,.filtre input{padding:12px;border-radius:10px;border:1px solid #ccc;flex:1;font-size:15px;}
-.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;}
-.kart{background:var(--kart);padding:25px 20px;border-radius:15px;text-align:center;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,0.1);transition:0.2s;font-weight:bold;}
-.kart:hover{transform:translateY(-4px);box-shadow:0 5px 15px rgba(0,0,0,0.2);}
-.sayfa{display:none;background:var(--kart);padding:20px;border-radius:15px;margin-top:15px;box-shadow:0 3px 10px rgba(0,0,0,0.1);}
-.btn{padding:11px 18px;background:var(--mavi);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin:5px;transition:0.2s;}
-.btn:hover{opacity:0.9;}.btn-sil{background:var(--kirmizi);}.btn-yesil{background:var(--yesil);}
-input,select{width:100%;padding:11px;border:1px solid #ccc;border-radius:9px;margin:8px 0;font-size:15px;}
-.az-stok{color:var(--kirmizi);font-weight:bold;}.cok-stok{color:var(--yesil);font-weight:bold;}
-.tabloscroll{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;}
-th{background:var(--mavi);color:white;padding:12px;text-align:left;font-size:14px;}
-td{padding:12px;border-bottom:1px solid #eee;cursor:pointer;}
-#login{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}
-.login-kart{background:var(--kart);padding:35px;border-radius:18px;width:100%;max-width:420px;box-shadow:0 8px 30px rgba(0,0,0,0.2);}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:100;}
-.modal-icerik{background:var(--kart);padding:25px;border-radius:15px;width:90%;max-width:500px;}
-@media(min-width:768px){.menu-grid{grid-template-columns:repeat(4,1fr);}.stats{grid-template-columns:repeat(4,1fr);}}
+*{box-sizing:border-box}
+body{font-family:system-ui;background:#f1f5f9;margin:0;padding:15px}
+.header{background:#2563eb;color:white;padding:15px;border-radius:12px;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.header button{background:#ef4444;color:white;border:none;padding:8px 15px;border-radius:8px;cursor:pointer;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
+.kart{background:white;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);text-align:center;cursor:pointer;transition:0.2s;border:2px solid transparent}
+.kart:hover{transform:translateY(-3px);border-color:#2563eb}
+.kart h3{margin:10px 0 5px;color:#2563eb;font-size:16px}
+.kart p{margin:0;font-size:12px;color:#666}
+.icon{font-size:30px}
 </style>
 </head>
 <body>
-<div id="login"><div class="login-kart">
-<h2 style="text-align:center;margin-bottom:20px;color:var(--mavi);">METAL BAŞLIK V11.2</h2>
-<input id="kullanici" placeholder="Kullanıcı Adı" value="admin">
-<input type="password" id="sifre" placeholder="Şifre" value="1234">
-<button onclick="giris()" class="btn" style="width:100%;margin-top:10px;">GİRİŞ YAP</button>
-</div></div>
-<div id="app" style="display:none;">
-<div class="ust">
-<h1>METAL BAŞLIK V11.2 <span id="kullaniciAdi"></span></h1>
-<div><button onclick="temaDegist()" class="btn-ust">🌓</button> <button onclick="cikisYap()" class="btn-ust">🚪</button></div>
+<div class="header">
+  <div>
+    <h1 style="margin:0;font-size:20px">METAL BAŞLIK AMBAR V11.2</h1>
+    <small>Hoşgeldin: <b id="kullanici">ADMIN</b></small>
+  </div>
+  <button onclick="cikis()">ÇIKIŞ</button>
 </div>
-<div id="main" class="container">
-<div class="stats">
-<div class="stat-kart"><h3>TOPLAM MAKİNE</h3><p id="toplamMakine">0</p></div>
-<div class="stat-kart"><h3>TOPLAM MALZEME</h3><p id="toplamUrun">0</p></div>
-<div class="stat-kart"><h3>TOPLAM STOK</h3><p id="toplamStok">0</p></div>
-<div class="stat-kart"><h3>KRİTİK STOK</h3><p id="kritikStok" style="color:var(--kirmizi)">0</p></div>
+
+<div class="grid">
+  <div class="kart" onclick="alert('Depo Yönetimi açılacak')">
+    <div class="icon">📦</div><h3>Depo Yönetimi</h3><p>Ürün Ekle / Çıkar</p>
+  </div>
+  <div class="kart" onclick="alert('Sevkiyat açılacak')">
+    <div class="icon">🚚</div><h3>Sevkiyat</h3><p>Yükleme / İrsaliye</p>
+  </div>
+  <div class="kart" onclick="alert('Personel açılacak')">
+    <div class="icon">👷</div><h3>Personel</h3><p>Vardiya / Maaş</p>
+  </div>
+  <div class="kart" onclick="alert('Raporlar açılacak')">
+    <div class="icon">📊</div><h3>Raporlar</h3><p>Günlük / Aylık</p>
+  </div>
+  <div class="kart" onclick="alert('Ayarlar açılacak')">
+    <div class="icon">⚙️</div><h3>Ayarlar</h3><p>Kullanıcı / Yedek</p>
+  </div>
+  <div class="kart" onclick="alert('Stok Sayım açılacak')">
+    <div class="icon">📋</div><h3>Stok Sayım</h3><p>Envanter</p>
+  </div>
 </div>
-<div class="menu-grid">
-<div class="kart" onclick="sayfaAc('stok')">📦<br>Makine Depoları</div>
-<div class="kart" onclick="sayfaAc('hareket')">📊<br>Giriş-Çıkış Hareket</div>
-<div class="kart" onclick="sayfaAc('makine')">⚙️<br>Makine Yönetimi</div>
-<div class="kart" onclick="sayfaAc('kullanici')">👤<br>Kullanıcı Yönetimi</div>
-</div>
-</div>
-<!-- STOK SAYFASI -->
-<div id="stok" class="sayfa container">
-<button class="btn" onclick="anaMenu()"><- Ana Menü</button>
-<h2>Makine Depo Takibi</h2>
-<div class="filtre">
-<select id="makineFiltre" onchange="listele()"><option value="">Tüm Makineler</option></select>
-<input id="aramaInput" onkeyup="listele()" placeholder="Malzeme adı veya kod ara...">
-</div>
-<button class="btn btn-yesil" onclick="modalAc()">+ Yeni Malzeme Ekle</button>
-<div class="tabloscroll"><table><thead><tr><th>Makine</th><th>Kod</th><th>Malzeme Adı</th><th>Depo Yeri</th><th>Adet</th></tr></thead><tbody id="tablo"></tbody></table></div>
-<div id="detay"></div>
-</div>
-<!-- HAREKET SAYFASI -->
-<div id="hareket" class="sayfa container">
-<button class="btn" onclick="anaMenu()"><- Ana Menü</button>
-<h2>Giriş-Çıkış Hareketleri</h2>
-<button class="btn btn-yesil" onclick="hareketEkle('GIRIS')">+ Stok Girişi</button>
-<button class="btn" onclick="hareketEkle('CIKIS')">- Stok Çıkışı</button>
-<div class="tabloscroll"><table><thead><tr><th>Tarih</th><th>İşlem</th><th>Malzeme</th><th>Adet</th><th>Kullanıcı</th></tr></thead><tbody id="hareketTablo"></tbody></table></div>
-</div>
-<!-- MAKINE SAYFASI -->
-<div id="makine" class="sayfa container">
-<button class="btn" onclick="anaMenu()"><- Ana Menü</button>
-<h2>Makine Yönetimi</h2>
-<table><tbody id="makineTablo"></tbody></table>
-<input id="yeniMakine" placeholder="Makine Adı: Örn PRES-1">
-<button class="btn" onclick="makineEkle()">MAKİNE EKLE</button>
-</div>
-<!-- KULLANICI SAYFASI -->
-<div id="kullanici" class="sayfa container">
-<button class="btn" onclick="anaMenu()"><- Ana Menü</button>
-<h2>Kullanıcı Yönetimi</h2>
-<table><tbody id="kullaniciTablo"></tbody></table>
-<input id="yeniKadi" placeholder="Yeni Kullanıcı Adı">
-<input id="yeniSifre" placeholder="Şifre">
-<button class="btn" onclick="kullaniciEkle()">KULLANICI EKLE</button>
-</div>
-</div>
-<!-- YENİ MALZEME MODAL -->
-<div id="modal" class="modal"><div class="modal-icerik">
-<h3>Yeni Malzeme Ekle</h3>
-<select id="mMakine"></select>
-<input id="mAd" placeholder="Malzeme Adı: Örn M10 Civata">
-<input id="mBolum" placeholder="Bölüm: Örn KALIP">
-<input id="mRaf" placeholder="Raf: Örn A">
-<input id="mSira" placeholder="Sıra: Örn 03">
-<input id="mAdet" type="number" placeholder="Başlangıç Adedi">
-<button class="btn btn-yesil" onclick="yeniUrunKaydet()">KAYDET</button>
-<button class="btn btn-sil" onclick="modalKapat()">İPTAL</button>
-</div></div>
-<!-- HAREKET MODAL -->
-<div id="modalHareket" class="modal"><div class="modal-icerik">
-<h3 id="hBaslik">Stok Hareketi</h3>
-<select id="hMalzeme"></select>
-<input id="hAdet" type="number" placeholder="Adet">
-<button class="btn btn-yesil" onclick="hareketKaydet()">ONAYLA</button>
-<button class="btn btn-sil" onclick="modalHareketKapat()">İPTAL</button>
-</div></div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-// SENİN FIREBASE KODUN
-const firebaseConfig = {
-  apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
-  authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
-  projectId: "metalbaslikambar-94c7e",
-  storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
-  messagingSenderId: "313915466857",
-  appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8",
-  measurementId: "G-X6YFMY86KX"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-let urunler = []; let kullanicilar = []; let makineler = []; let hareketler = []; let secili=0; let aktifKullanici=""; let hTip="";
-async function verileriYukle(){
-  urunler = []; kullanicilar = []; makineler = []; hareketler = [];
-  const uSnap = await getDocs(collection(db, "urunler"));
-  uSnap.forEach(d=>urunler.push({id:d.id,...d.data()}));
-  const kSnap = await getDocs(collection(db, "kullanicilar"));
-  kSnap.forEach(d=>kullanicilar.push({id:d.id,...d.data()}));
-  const mSnap = await getDocs(collection(db, "makineler"));
-  mSnap.forEach(d=>makineler.push({id:d.id,...d.data()}));
-  const hSnap = await getDocs(collection(db, "hareketler"));
-  hSnap.forEach(d=>hareketler.push({id:d.id,...d.data()}));
-  if(kullanicilar.length==0) await addDoc(collection(db,"kullanicilar"),{kadi:"admin",sifre:"1234"});
-  if(makineler.length==0) await addDoc(collection(db,"makineler"),{ad:"PRES-1"});
-  istatistik(); makineListele(); makineFiltreDoldur(); listele(); kullaniciListele(); hareketListele();
+
+<script>
+// SADECE ÇIKIŞ İÇİN KONTROL
+function cikis(){
+  localStorage.removeItem("aktifKullanici");
+  window.location.replace("index.html");
 }
-function giris(){let k=kullanicilar.find(x=>x.kadi==kullanici.value&&x.sifre==sifre.value);if(k){aktifKullanici=k.kadi; login.style.display='none';app.style.display='block';kullaniciAdi.innerText='- '+k.kadi.toUpperCase();verileriYukle();}else alert("Kullanıcı adı veya şifre hatalı")}
-function cikisYap(){app.style.display='none';login.style.display='flex';}
-function sayfaAc(id){main.style.display='none';document.querySelectorAll('.sayfa').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';}
-function anaMenu(){document.querySelectorAll('.sayfa').forEach(s=>s.style.display='none');main.style.display='block';}
-function temaDegist(){document.body.classList.toggle('dark');}
-function istatistik(){
-  toplamMakine.innerText=makineler.length;
-  toplamUrun.innerText=urunler.length;
-  toplamStok.innerText=urunler.reduce((a,b)=>a+(b.adet||0),0);
-  kritikStok.innerText=urunler.filter(u=>(u.adet||0)<5).length;
-}
-function makineFiltreDoldur(){makineFiltre.innerHTML='<option value="">Tüm Makineler</option>'; mMakine.innerHTML=""; makineler.forEach(m=>{makineFiltre.innerHTML+=`<option value="${m.ad}">${m.ad}</option>`; mMakine.innerHTML+=`<option value="${m.ad}">${m.ad}</option>`;});}
-function makineListele(){makineTablo.innerHTML="";makineler.forEach(m=>makineTablo.innerHTML+=`<tr><td>${m.ad}</td></tr>`);}
-async function makineEkle(){if(yeniMakine.value=="")return; await addDoc(collection(db,"makineler"),{ad:yeniMakine.value});yeniMakine.value="";verileriYukle();}
-function listele(){
-  let filtre = makineFiltre.value; let ara = aramaInput.value.toLowerCase();
-  let filtreli = urunler.filter(u=> (filtre=="" || u.makine==filtre) && (u.ad.toLowerCase().includes(ara) || u.kod.toLowerCase().includes(ara)) );
-  tablo.innerHTML="";
-  filtreli.forEach((u,i)=> {
-    let stokClass = (u.adet||0) < 5? 'class="az-stok"' : 'class="cok-stok"';
-    tablo.innerHTML+=`<tr onclick="detayGoster(${urunler.indexOf(u)})">
-      <td>${u.makine}</td><td>${u.kod}</td><td>${u.ad}</td>
-      <td>${u.bolum}-${u.raf}-${u.sira}</td><td ${stokClass}>${u.adet||0}</td></tr>`;
-  });
-}
-function modalAc(){modal.style.display='flex';}
-function modalKapat(){modal.style.display='none';}
-async function yeniUrunKaydet(){
-  let kod = mMakine.value+"-"+mBolum.value+"-"+mRaf.value+mSira.value;
-  await addDoc(collection(db,"urunler"),{
-    makine:mMakine.value, bolum:mBolum.value, raf:mRaf.value, sira:mSira.value,
-    kod:kod, ad:mAd.value, adet:parseFloat(mAdet.value)||0
-  });modalKapat(); mAd.value=""; mAdet.value=""; verileriYukle();
-}
-async function detayGoster(i){secili=i; let u=urunler[i];
-detay.innerHTML=`<h4 style="margin-top:15px">${u.ad}</h4>
-<input id="ad" value="${u.ad}" placeholder="Malzeme Adı">
-<input id="adet" type="number" value="${u.adet||0}" placeholder="Adet">
-<button class="btn" onclick="guncelle()">KAYDET</button><button class="btn btn-sil" onclick="silUrun()">SİL</button>`;
-}
-async function guncelle(){await updateDoc(doc(db,"urunler",urunler[secili].id),{ad:ad.value,adet:parseFloat(adet.value)});detay.innerHTML="";verileriYukle();}
-async function silUrun(){await deleteDoc(doc(db,"urunler",urunler[secili].id));detay.innerHTML="";verileriYukle();}
-function kullaniciListele(){kullaniciTablo.innerHTML="";kullanicilar.forEach(k=>kullaniciTablo.innerHTML+=`<tr><td>${k.kadi}</td></tr>`);}
-async function kullaniciEkle(){if(yeniKadi.value=="")return; await addDoc(collection(db,"kullanicilar"),{kadi:yeniKadi.value,sifre:yeniSifre.value});yeniKadi.value="";yeniSifre.value="";verileriYukle();}
-function hareketListele(){hareketTablo.innerHTML=""; hareketler.sort((a,b)=>b.tarih-a.tarih).forEach(h=>{let renk = h.tip=='GIRIS'?'style="color:var(--yesil)"':'style="color:var(--kirmizi)"'; hareketTablo.innerHTML+=`<tr><td>${new Date(h.tarih).toLocaleString()}</td><td ${renk}>${h.tip}</td><td>${h.malzeme}</td><td>${h.adet}</td><td>${h.kullanici}</td></tr>`;});}
-function modalHareketAc(){modalHareket.style.display='flex';}
-function modalHareketKapat(){modalHareket.style.display='none';}
-function hareketEkle(tip){hTip=tip; hBaslik.innerText = tip=='GIRIS'?'Stok Girişi Yap':'Stok Çıkışı Yap'; hMalzeme.innerHTML=""; urunler.forEach(u=>hMalzeme.innerHTML+=`<option value="${u.id}">${u.kod} - ${u.ad}</option>`); modalHareketAc();}
-async function hareketKaydet(){
-  let urunId = hMalzeme.value; let adet = parseFloat(hAdet.value);
-  let u = urunler.find(x=>x.id==urunId);
-  let yeniAdet = hTip=='GIRIS'? (u.adet||0)+adet : (u.adet||0)-adet;
-  await updateDoc(doc(db,"urunler",urunId),{adet:yeniAdet});
-  await addDoc(collection(db,"hareketler"),{tip:hTip, malzeme:u.ad, adet:adet, kullanici:aktifKullanici, tarih:Date.now()});
-  modalHareketKapat(); hAdet.value=""; verileriYukle();
-}
+
+// Kullanıcı adını yaz
+const k = localStorage.getItem("aktifKullanici");
+if(k){ document.getElementById("kullanici").innerText = k; }
 </script>
-</body></html>
+</body>
+</html>
