@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Metal Başlık V10 Bulut</title>
-<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI';background:linear-gradient(135deg,#2a5caa 0%,#1e3f73 100%);min-height:100vh;}.ust{background:#2a5caa;color:#ffd700;text-align:center;padding:10px;font-weight:bold;}#login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;}.login-kart{background:white;padding:30px;border-radius:15px;width:100%;max-width:380px;}.login-btn{width:100%;padding:12px;background:#2a5caa;color:#ffd700;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}.menu-box{width:100%;max-width:900px;margin:15px auto;background:#c0c0c0;padding:15px;border-radius:10px;}.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}.kart{background:#fff;border-radius:10px;text-align:center;padding:20px 10px;cursor:pointer;}.sayfa{display:none;background:white;margin:10px;padding:15px;border-radius:10px;}.tablo{width:100%;border-collapse:collapse;}.tablo th{background:#2a5caa;color:white;padding:8px;}.tablo td{border:1px solid #ddd;padding:6px;cursor:pointer;}.btn{padding:10px 15px;margin:5px;cursor:pointer;border:none;background:#2a5caa;color:white;border-radius:6px;}.btn-sil{background:#dc3545;}@media screen and (min-width:768px){.menu-grid{grid-template-columns:repeat(4,1fr);}}</style>
+<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI';background:linear-gradient(135deg,#2a5caa 0%,#1e3f73 100%);min-height:100vh;}.ust{background:#2a5caa;color:#ffd700;text-align:center;padding:10px;font-weight:bold;}#login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px;}.login-kart{background:white;padding:30px;border-radius:15px;width:100%;max-width:380px;}input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;}.login-btn{width:100%;padding:12px;background:#2a5caa;color:#ffd700;border:none;border-radius:8px;font-weight:bold;cursor:pointer;}.menu-box{width:100%;max-width:900px;margin:15px auto;background:#c0c0c0;padding:15px;border-radius:10px;}.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}.kart{background:#fff;border-radius:10px;text-align:center;padding:20px 10px;cursor:pointer;box-shadow:0 2px 4px rgba(0,0,0,.1);}.sayfa{display:none;background:white;margin:10px;padding:15px;border-radius:10px;}.tablo{width:100%;border-collapse:collapse;margin-top:10px;}.tablo th{background:#2a5caa;color:white;padding:8px;}.tablo td{border:1px solid #ddd;padding:6px;cursor:pointer;}.btn{padding:10px 15px;margin:5px;cursor:pointer;border:none;background:#2a5caa;color:white;border-radius:6px;font-weight:bold;}.btn-sil{background:#dc3545;}@media screen and (min-width:768px){.menu-grid{grid-template-columns:repeat(4,1fr);}}</style>
 </head>
 <body>
 <div class="ust">METAL BAŞLIK V10 - BULUT<br>KULLANICI: <span id="kullaniciAdi">ADMIN</span></div>
@@ -13,21 +13,27 @@
 <div id="main" style="display:none;"><div class="menu-box"><div class="menu-grid">
 <div class="kart" onclick="sayfaAc('stok')"><b>Malzeme Listesi</b></div>
 <div class="kart" onclick="sayfaAc('kullanici')"><b>Kullanıcı Yönetimi</b></div>
-<div class="kart" onclick="alert('Buluta otomatik kayıt')"><b>Bulut Yedek</b></div>
+<div class="kart" onclick="alert('Veriler bulutta güvende ✓')"><b>Bulut Yedek</b></div>
 <div class="kart" onclick="cikisYap()"><b>Çıkış Yap</b></div>
 </div></div></div>
 
-<div id="stok" class="sayfa"><button class="btn" onclick="anaMenu()"><- GERİ</button><h3>YEDEK MALZEME</h3><button class="btn" onclick="yeniUrun()">+ YENİ</button><table class="tablo"><thead><tr><th>Kod</th><th>Ad</th><th>Depo</th></tr></thead><tbody id="tablo"></tbody></table><div id="detay"></div></div>
+<div id="stok" class="sayfa"><button class="btn" onclick="anaMenu()"><- GERİ</button><h3>YEDEK MALZEME</h3><button class="btn" onclick="yeniUrun()">+ YENİ MALZEME</button><table class="tablo"><thead><tr><th>Kod</th><th>Ad</th><th>Depo</th></tr></thead><tbody id="tablo"></tbody></table><div id="detay"></div></div>
 
-<div id="kullanici" class="sayfa"><button class="btn" onclick="anaMenu()"><- GERİ</button><h3>KULLANICI</h3><table class="tablo"><tbody id="kullaniciTablo"></tbody></table><input id="yeniKadi" placeholder="Kullanıcı"><input id="yeniSifre" placeholder="Şifre"><button class="btn" onclick="kullaniciEkle()">EKLE</button></div>
+<div id="kullanici" class="sayfa"><button class="btn" onclick="anaMenu()"><- GERİ</button><h3>KULLANICI YÖNETİMİ</h3><table class="tablo"><tbody id="kullaniciTablo"></tbody></table><input id="yeniKadi" placeholder="Yeni Kullanıcı"><input id="yeniSifre" placeholder="Şifre"><button class="btn" onclick="kullaniciEkle()">EKLE</button></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// BURAYA_YAPISTIR - Firebase kodunu buraya yapıştır
+// SENİN FIREBASE KODUN
 const firebaseConfig = {
-  SENIN_KODUN_BURAYA
+  apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
+  authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
+  projectId: "metalbaslikambar-94c7e",
+  storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
+  messagingSenderId: "313915466857",
+  appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8",
+  measurementId: "G-X6YFMY86KX"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -42,22 +48,10 @@ async function verileriYukle(){
   const kSnap = await getDocs(collection(db, "kullanicilar"));
   kSnap.forEach(d=>kullanicilar.push({id:d.id, ...d.data()}));
   if(kullanicilar.length==0) await addDoc(collection(db,"kullanicilar"),{kadi:"admin",sifre:"1234"});
-  listele();
+  listele(); kullaniciListele();
 }
 
-function giris(){let k=kullanicilar.find(x=>x.kadi==kullanici.value&&x.sifre==sifre.value);if(k){login.style.display='none';main.style.display='block';kullaniciAdi.innerText=k.kadi.toUpperCase();verileriYukle();}else alert("Hatalı")}
+function giris(){let k=kullanicilar.find(x=>x.kadi==kullanici.value&&x.sifre==sifre.value);if(k){login.style.display='none';main.style.display='block';kullaniciAdi.innerText=k.kadi.toUpperCase();verileriYukle();}else alert("Kullanıcı adı veya şifre hatalı")}
 function cikisYap(){main.style.display='none';login.style.display='flex';}
 function sayfaAc(id){main.style.display='none';document.querySelectorAll('.sayfa').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';}
-function anaMenu(){document.querySelectorAll('.sayfa').forEach(s=>s.style.display='none');main.style.display='block';}
-
-function listele(){tablo.innerHTML="";urunler.forEach((u,i)=>tablo.innerHTML+=`<tr onclick="detayGoster(${i})"><td>${u.kod}</td><td>${u.ad}</td><td>${u.depo||0}</td></tr>`);}
-async function yeniUrun(){let ref=await addDoc(collection(db,"urunler"),{kod:"MB-"+(urunler.length+1),ad:"YENİ",depo:0});verileriYukle();}
-async function detayGoster(i){secili=i;detay.innerHTML=`<h4>${urunler[i].ad}</h4><input id="ad" value="${urunler[i].ad}"><input id="depo" type="number" value="${urunler[i].depo||0}"><button class="btn" onclick="guncelle()">KAYDET</button><button class="btn btn-sil" onclick="silUrun()">SİL</button>`;}
-async function guncelle(){await updateDoc(doc(db,"urunler",urunler[secili].id),{ad:ad.value,depo:parseFloat(depo.value)});verileriYukle();}
-async function silUrun(){await deleteDoc(doc(db,"urunler",urunler[secili].id));detay.innerHTML="";verileriYukle();}
-
-function kullaniciListele(){kullaniciTablo.innerHTML="";kullanicilar.forEach(k=>kullaniciTablo.innerHTML+=`<tr><td>${k.kadi}</td></tr>`);}
-async function kullaniciEkle(){await addDoc(collection(db,"kullanicilar"),{kadi:yeniKadi.value,sifre:yeniSifre.value});verileriYukle();}
-
-</script>
-</body></html>
+function anaMenu(){document.querySelectorAll('.sayfa').forEach(s=>
