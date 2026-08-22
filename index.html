@@ -2,69 +2,91 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Giriş</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metal Başlık Ambar - Admin</title>
 <style>
-body{font-family:Arial;display:flex;justify-content:center;align-items:center;height:100vh;background:#f0f0f0}
-.kutu{background:white;padding:30px;border-radius:10px;box-shadow:0 0 15px #ccc;width:300px}
-input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:5px}
-button{width:100%;padding:12px;background:#007bff;color:white;border:none;border-radius:5px;cursor:pointer}
-#mesaj{text-align:center;margin-top:10px;font-weight:bold}
+* {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+body {
+  height:100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+.glass {
+  width: 90%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px 30px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  animation: fadeIn 1s ease;
+}
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(20px);}
+  to {opacity:1; transform: translateY(0);}
+}
+.logo {
+  text-align:center;
+  font-size:24px;
+  font-weight:700;
+  color:#fff;
+  margin-bottom:30px;
+  letter-spacing:2px;
+}
+.input-group {margin-bottom:20px;}
+.input-group input {
+  width:100%;
+  padding:15px;
+  background: rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:10px;
+  color:#fff;
+  font-size:16px;
+  outline:none;
+  transition:0.3s;
+}
+.input-group input:focus {
+  border-color:#00c6ff;
+  background: rgba(255,255,255,0.15);
+}
+.input-group input::placeholder {color: rgba(255,255,255,0.6);}
+.btn {
+  width:100%;
+  padding:15px;
+  background: linear-gradient(90deg, #00c6ff, #0072ff);
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  font-size:18px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 114, 255, 0.4);
+}
+#mesaj {text-align:center; margin-top:15px; font-weight:600; height:20px;}
 </style>
 </head>
 <body>
 
-<div class="kutu">
-<h2 style="text-align:center">Yönetici Girişi</h2>
-<input type="text" id="kadi" placeholder="Kullanıcı Adı">
-<input type="password" id="sifre" placeholder="Şifre">
-<button onclick="girisYap()">Giriş Yap</button>
-<p id="mesaj"></p>
+<div class="glass">
+  <div class="logo">METAL BAŞLIK AMBAR</div>
+  <div class="input-group">
+    <input type="text" id="kadi" placeholder="Kullanıcı Adı">
+  </div>
+  <div class="input-group">
+    <input type="password" id="sifre" placeholder="Şifre">
+  </div>
+  <button class="btn" onclick="girisYap()">GİRİŞ YAP</button>
+  <p id="mesaj"></p>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
-  authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
-  projectId: "metalbaslikambar-94c7e",
-  storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
-  messagingSenderId: "313915466857",
-  appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8",
-  measurementId: "G-X6YFMY86KX"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.girisYap = async function() {
-  const kadi = document.getElementById('kadi').value;
-  const sifre = document.getElementById('sifre').value;
-  const mesaj = document.getElementById('mesaj');
-  mesaj.innerText = "Kontrol ediliyor...";
-
-  const ref = doc(db, "kullanicilar", "admin123");
-  const snap = await getDoc(ref);
-
-  if (snap.exists()) {
-    const data = snap.data();
-    if (data.kadi === kadi && data.sifre === sifre) {
-      mesaj.style.color = "green";
-mesaj.innerText = "Başarılı! Yönlendiriliyor...";
-setTimeout(() => {
-  window.location.href = "panel.html";
-}, 1500);;
-    } else {
-      mesaj.style.color = "red";
-      mesaj.innerText = "Kullanıcı adı veya şifre hatalı";
-    }
-  } else {
-    mesaj.style.color = "red";
-    mesaj.innerText = "Kullanıcı bulunamadı";
-  }
-}
-</script>
-
-</body>
-</html>
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-f
