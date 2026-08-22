@@ -34,10 +34,23 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-function login() {
-  const kadi = document.getElementById('username').value;
-  const sifre = document.getElementById('password').value;
-  
+  function login() {
+  const kadi = document.getElementById("username").value;
+  const sifre = document.getElementById("password").value;
+
+  db.collection("kullanicilar").where("kadi", "==", kadi).where("sifre", "==", sifre).get()
+  .then((querySnapshot) => {
+    if (!querySnapshot.empty) {
+      alert("Giriş başarılı!");
+      window.location.href = "panel.html";
+    } else {
+      alert("Kullanıcı adı veya şifre hatalı!");
+    }
+  })
+  .catch((error) => {
+    alert("HATA OLDU: " + error.message); // Hata varsa bunu gösterecek
+  });
+}
   db.collection("kullanicilar").where("kadi", "==", kadi).where("sifre", "==", sifre).get()
   .then((querySnapshot) => {
     if (!querySnapshot.empty) {
