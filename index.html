@@ -1,23 +1,127 @@
 <!DOCTYPE html>
-<html>
-<head><title>TEST</title></head>
-<body style="background:#2a5caa; color:yellow; text-align:center; padding:50px;">
-<h1>BİLGEM AMBAR PROGRAMI</h1>
-<h2>Kullanıcı: <input id="kullanici" value="admin"></h2>
-<h2>Şifre: <input id="sifre" type="password" value="1234"></h2>
-<button onclick="giris()" style="padding:15px; font-size:18px;">GİRİŞ</button>
-<h3 id="sonuc"></h3>
+<html lang="tr">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metal Başlık Ambar Programı</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+body{font-family:Tahoma; margin:0; background:#808080;}
+.ust{background:#2a5caa; color:#ffd700; text-align:center; padding:8px; font-weight:bold; font-size:14px;}
+.menu-box{width:95%; max-width:900px; margin:15px auto; background:#c0c0c0; padding:10px; border:3px outset #fff;}
+.menu-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;}
+.kart{background:#fff; border:2px outset #fff; text-align:center; padding:12px 5px; cursor:pointer; font-size:12px;}
+.kart:hover{border:2px inset #fff; background:#ffff99;}
+.kart img{width:40px; height:40px;}
+.kart.sari{background:#ffff99;}
+.alt{color:#ffd700; text-align:center; padding:8px;}
+#stokEkrani{display:none; background:white; margin:10px; padding:10px;}
+.tablo{width:100%; border-collapse:collapse; font-size:12px;}
+.tablo th{background:#2a5caa; color:white; padding:5px;}
+.tablo td{border:1px solid #999; padding:4px; cursor:pointer;}
+.tablo tr:hover{background:#ffff99;}
+.resim-alani{width:100%; height:180px; border:2px dashed #999; background:#eee; display:flex; align-items:center; justify-content:center;}
+.resim-alani img{max-width:100%; max-height:100%;}
+.btn{padding:6px 10px; margin:2px; cursor:pointer; border:1px outset #ccc; background:#c0c0c0;}
+.btn:hover{border:1px inset #ccc;}
+</style>
+</head>
+<body>
+
+<div class="ust">
+METAL BAŞLIK AMBAR PROGRAMI<br>
+www.metalbaslik.com<br>
+KULLANICI: <span id="kullaniciAdi">ADMIN</span>
+</div>
+
+<div id="login" style="padding:50px; text-align:center; background:white; width:300px; margin:50px auto; border:2px outset #fff;">
+<h3>GİRİŞ EKRANI</h3>
+Kullanıcı: <input id="kullanici" value="admin"><br><br>
+Şifre: <input type="password" id="sifre" value="1234"><br><br>
+<button onclick="giris()" class="btn" style="background:#2a5caa; color:#ffd700;">TAMAM</button>
+</div>
+
+<div id="main" style="display:none;">
+<div class="menu-box">
+<div class="menu-grid">
+<div class="kart" onclick="alert('Parça Satış yakında')"><img src="https://cdn-icons-png.flaticon.com/512/8913/8913996.png"><br><b>Parça Sat</b></div>
+<div class="kart sari" onclick="stokAc()"><img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"><br><b>Stok İşlemleri</b></div>
+<div class="kart" onclick="barkodBas()"><img src="https://cdn-icons-png.flaticon.com/512/2936/2936886.png"><br><b>Barkod Bas</b></div>
+<div class="kart" onclick="pdfRapor()"><img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png"><br><b>PDF Rapor</b></div>
+
+<div class="kart" onclick="excelAktar()"><img src="https://cdn-icons-png.flaticon.com/512/337/337946.png"><br><b>Excel Aktar</b></div>
+<div class="kart" onclick="kaydet()"><img src="https://cdn-icons-png.flaticon.com/512/3767/3767084.png"><br><b>Kaydet</b></div>
+<div class="kart" onclick="alert('Tel: 0555 555 55 55')"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"><br><b>Teknik Destek</b></div>
+<div class="kart" onclick="window.close()"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828427.png"><br><b>Program Kapat</b></div>
+</div>
+</div>
+<div class="alt">ADMIN www.metalbaslik.com</div>
+
+<div id="stokEkrani">
+<h3>STOK İŞLEMLERİ</h3>
+<input id="arama" placeholder="Malzeme Ara..." onkeyup="listele()">
+<button class="btn" onclick="yeniUrun()">+ YENİ</button>
+<table class="tablo"><thead><tr><th>Kod</th><th>Adı</th><th>Depo</th><th>Makine</th><th>Elimde</th><th>Toplam</th></tr></thead><tbody id="tablo"></tbody></table>
+<hr>
+<div id="detay"></div>
+</div>
+
+</div>
 
 <script>
+const { jsPDF } = window.jspdf;
+let urunler = JSON.parse(localStorage.getItem('metalbaslik_urunler')) || [
+  {kod:"MB-001", ad:"RULMAN 6204", depo:10, makine:2, elde:1, resim:""}
+];
+let secili=0;
+
 function giris(){
-  document.getElementById('sonuc').innerText = "Butona basıldı...";
   if(kullanici.value=="admin" && sifre.value=="1234"){
-    document.getElementById('sonuc').innerText = "Şifre Doğru! Menü açılmalıydı.";
-    document.body.innerHTML = "<h1 style='color:lime'>GİRİŞ BAŞARILI ✅</h1><h2>Menü buraya gelecek</h2>";
-  } else {
-    document.getElementById('sonuc').innerText = "Şifre Yanlış!";
-  }
+    document.getElementById('login').style.display='none';
+    document.getElementById('main').style.display='block';
+    document.getElementById('kullaniciAdi').innerText = kullanici.value.toUpperCase();
+  } else alert("Kullanıcı veya şifre hatalı")
 }
+function stokAc(){document.getElementById('stokEkrani').style.display='block'; listele();}
+function kaydet(){localStorage.setItem('metalbaslik_urunler',JSON.stringify(urunler)); alert("Kayıt Başarılı")}
+
+function listele(){
+  tablo.innerHTML="";
+  urunler.filter(u=>u.kod.toLowerCase().includes(arama.value.toLowerCase())||u.ad.toLowerCase().includes(arama.value.toLowerCase()))
+ .forEach((u,i)=>{
+    let toplam = u.depo + u.makine + u.elde;
+    tablo.innerHTML += `<tr onclick="detayGoster(${i})"><td>${u.kod}</td><td>${u.ad}</td><td>${u.depo}</td><td>${u.makine}</td><td>${u.elde}</td><td><b>${toplam}</b></td></tr>`;
+  })
+}
+function detayGoster(i){
+  secili=i; let u=urunler[i];
+  detay.innerHTML = `<h4>${u.ad}</h4>
+  <div class="resim-alani" id="resimAlani">${u.resim?`<img src="${u.resim}">`:'Resim Yok'}</div>
+  <input type="file" accept="image/*" onchange="resimEkle(event)"><br><br>
+  Depo:<input id="depo" value="${u.depo}" size="4">
+  Makine:<input id="makine" value="${u.makine}" size="4">
+  Elimde:<input id="elde" value="${u.elde}" size="4">
+  <button class="btn" onclick="guncelle()">GÜNCELLE</button>
+  <button class="btn" onclick="islemYap('eldeye_ver')">Depodan Elime Ver</button>`;
+}
+function guncelle(){urunler[secili].depo=parseFloat(depo.value)||0; urunler[secili].makine=parseFloat(makine.value)||0; urunler[secili].elde=parseFloat(elde.value)||0; kaydet(); listele(); detayGoster(secili);}
+function yeniUrun(){urunler.push({kod:"MB-"+(urunler.length+1), ad:"YENİ ÜRÜN", depo:0, makine:0, elde:0, resim:""}); kaydet(); listele();}
+function resimEkle(e){let r=new FileReader(); r.onload=()=>{urunler[secili].resim=r.result; kaydet(); detayGoster(secili)}; r.readAsDataURL(e.target.files[0]);}
+function islemYap(tur){let m=1; if(tur=='eldeye_ver'){if(urunler[secili].depo<m)return alert("Depo yetersiz"); urunler[secili].depo-=m; urunler[secili].elde+=m;} kaydet(); detayGoster(secili);}
+
+function pdfRapor(){
+  const doc = new jsPDF();
+  doc.text("METAL BAŞLIK AMBAR RAPORU", 10, 10);
+  let y=20;
+  urunler.forEach(u=>{doc.text(`${u.kod} - ${u.ad} - Top: ${u.depo+u.makine+u.elde}`,10,y); y+=10});
+  doc.save("MetalBaslik_Rapor.pdf");
+}
+function excelAktar(){
+  let ws = XLSX.utils.json_to_sheet(urunler);
+  let wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Stok");
+  XLSX.writeFile(wb, "MetalBaslik_Stok.xlsx");
+}
+function barkodBas(){alert("Barkod: "+urunler[secili].kod)}
 </script>
-</body>
-</html>
+</body></html>
