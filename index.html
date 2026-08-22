@@ -63,3 +63,19 @@
       }
     }
   </script>
+async function login() {
+  const kadi = document.getElementById("username").value;
+  const sifre = document.getElementById("password").value;
+
+  alert("1: Butona bastın");
+  const q = db.collection("kullanicilar").where("kadi", "==", kadi).where("sifre", "==", sifre);
+  alert("2: Sorgu hazırlandı");
+  const querySnapshot = await q.get();
+  alert("3: Firebase'den cevap geldi");
+  
+  if (!querySnapshot.empty) {
+    alert("4: Giriş başarılı!");
+  } else {
+    alert("4: Kullanıcı bulunamadı");
+  }
+}
