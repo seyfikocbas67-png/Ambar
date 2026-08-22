@@ -60,3 +60,72 @@ if(k){ document.getElementById("kullanici").innerText = k; }
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metal Başlık Ambar V11.2</title>
+<style>
+* {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif;}
+body {background:#f2f4f7; padding:15px;}
+.header {background: linear-gradient(90deg, #0072ff, #00c6ff); color:#fff; padding:20px; border-radius:15px; margin-bottom:20px;}
+.header h1 {font-size:20px; margin-bottom:5px;}
+.header p {font-size:14px; opacity:0.9;}
+.cikis {background:#ff4d4d; color:#fff; border:none; padding:8px 15px; border-radius:8px; margin-top:10px; cursor:pointer; font-weight:600;}
+.grid {display:grid; grid-template-columns: 1fr 1fr; gap:15px;}
+.card {background:#fff; padding:20px 10px; border-radius:15px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); cursor:pointer; transition:0.2s;}
+.card:hover {transform:translateY(-3px); box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+.card .icon {font-size:40px; margin-bottom:10px;}
+.card .title {font-size:16px; font-weight:700; color:#0072ff; margin-bottom:5px;}
+.card .desc {font-size:12px; color:#666;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>METAL BAŞLIK AMBAR V11.2</h1>
+  <p>Hoşgeldin: <b>ADMIN</b></p>
+  <button class="cikis" onclick="window.location.replace('index.html')">ÇIKIŞ</button>
+</div>
+
+<div class="grid">
+  <div class="card" onclick="window.location='depo.html'">
+    <div class="icon">📦</div>
+    <div class="title">Depo Yönetimi</div>
+    <div class="desc">Ürün Ekle / Çıkar</div>
+  </div>
+
+  <div class="card" onclick="window.location='sevkiyat.html'">
+    <div class="icon">🚚</div>
+    <div class="title">Sevkiyat</div>
+    <div class="desc">Yükleme / İrsaliye</div>
+  </div>
+
+  <div class="card" onclick="window.location='personel.html'">
+    <div class="icon">👷</div>
+    <div class="title">Personel</div>
+    <div class="desc">Vardiya / Maaş</div>
+  </div>
+
+  <div class="card" onclick="window.location='raporlar.html'">
+    <div class="icon">📊</div>
+    <div class="title">Raporlar</div>
+    <div class="desc">Günlük / Aylık</div>
+  </div>
+
+  <div class="card" onclick="window.location='ayarlar.html'">
+    <div class="icon">⚙️</div>
+    <div class="title">Ayarlar</div>
+    <div class="desc">Kullanıcı / Yedek</div>
+  </div>
+
+  <div class="card" onclick="window.location='stok.html'">
+    <div class="icon">📋</div>
+    <div class="title">Stok Sayım</div>
+    <div class="desc">Envanter</div>
+  </div>
+</div>
+
+</body>
+</html>
