@@ -1,16 +1,23 @@
 <!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metal Başlık Ambar Programı</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<style>
-body{font-family:Tahoma; margin:0; background:#808080;}
-.ust{background:#2a5caa; color:#ffd700; text-align:center; padding:8px; font-weight:bold; font-size:14px;}
-.menu-box{width:95%; max-width:900px; margin:15px auto; background:#c0c0c0; padding:10px; border:3px outset #fff;}
-.menu-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;}
-.kart{background:#fff; border:2px outset #fff; text-align:center; padding:12px 5px; cursor:pointer; font-size:12px;}
-.kart:hover{border:2px inset #fff; background:#ffff99;}
-.kart img{width:40px; height:40px;}
-.k
+<html>
+<head><title>TEST</title></head>
+<body style="background:#2a5caa; color:yellow; text-align:center; padding:50px;">
+<h1>BİLGEM AMBAR PROGRAMI</h1>
+<h2>Kullanıcı: <input id="kullanici" value="admin"></h2>
+<h2>Şifre: <input id="sifre" type="password" value="1234"></h2>
+<button onclick="giris()" style="padding:15px; font-size:18px;">GİRİŞ</button>
+<h3 id="sonuc"></h3>
+
+<script>
+function giris(){
+  document.getElementById('sonuc').innerText = "Butona basıldı...";
+  if(kullanici.value=="admin" && sifre.value=="1234"){
+    document.getElementById('sonuc').innerText = "Şifre Doğru! Menü açılmalıydı.";
+    document.body.innerHTML = "<h1 style='color:lime'>GİRİŞ BAŞARILI ✅</h1><h2>Menü buraya gelecek</h2>";
+  } else {
+    document.getElementById('sonuc').innerText = "Şifre Yanlış!";
+  }
+}
+</script>
+</body>
+</html>
