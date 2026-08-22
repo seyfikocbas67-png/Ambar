@@ -1,69 +1,58 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metal Başlık V10 Giriş</title>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<style>
-body{font-family:Arial,sans-serif;background:#1a1a1a;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
-.login-card{background:#2a2a2a;padding:30px;border-radius:10px;width:300px;text-align:center}
-input{width:100%;padding:10px;margin:10px 0;border:none;border-radius:5px;background:#333;color:#fff}
-button{width:100%;padding:10px;background:#ff9800;border:none;border-radius:5px;color:#000;font-weight:bold;cursor:pointer}
-button:hover{background:#ffb74d}
-</style>
+  <meta charset="UTF-8">
+  <title>Ambar Giriş</title>
+  <style>
+    body { font-family: Arial; background: #f2f2f2; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px #ccc; width: 300px; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+    button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #218838; }
+    h2 { text-align: center; }
+  </style>
 </head>
 <body>
-<div class="login-card">
-  <h2>METAL BAŞLIK V10</h2>
-  <input type="text" id="username" placeholder="Kullanıcı Adı">
-  <input type="password" id="password" placeholder="Şifre">
-  <button onclick="login()">Giriş Yap</button>
-</div>
-<script>
-const firebaseConfig = {
-const firebaseConfig = {
-  apiKey: "AIzaSyBwUM5k1Yy5J3nScnPQLF",
-  authDomain: "metalbasliambar.firebaseapp.com",
-  projectId: "metalbasliambar",
-  storageBucket: "metalbasliambar.appspot.com",
-  messagingSenderId: "112168412666",
-  appId: "1:112168412666:web:88521a971d06b5d941866"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+  <div class="login-box">
+    <h2>Ambar Giriş</h2>
+    <input type="text" id="username" placeholder="Kullanıcı Adı">
+    <input type="password" id="password" placeholder="Şifre">
+    <button onclick="login()">Giriş Yap</button>
+  </div>
 
-  function login() {
-  const kadi = document.getElementById("username").value;
-  const sifre = document.getElementById("password").value;
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-  db.collection("kullanicilar").where("kadi", "==", kadi).where("sifre", "==", sifre).get()
-  .then((querySnapshot) => {
-    if (!querySnapshot.empty) {
-      alert("Giriş başarılı!");
-      window.location.href = "panel.html";
-    } else {
-      alert("Kullanıcı adı veya şifre hatalı!");
-    }
-  })
-  .catch((error) => {
-    alert("HATA OLDU: " + error.message); // Hata varsa bunu gösterecek
-  });
-}
-  db.collection("kullanicilar").where("kadi", "==", kadi).where("sifre", "==", sifre).get()
-  .then((querySnapshot) => {
-    if (!querySnapshot.empty) {
-      alert("Giriş başarılı!");
-      window.location.href = "panel.html";
-    } else {
-      alert("Kullanıcı adı veya şifre hatalı!");
-    }
-  })
-  .catch((error) => {
-    alert("HATA DETAYI: " + error.code + "\n" + error.message);
-  });
-}
-</script>
-</body>
-</html>
+  <script>
+    // SENİN GERÇEK FIREBASE CONFIG'İN
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwUM5k1Yy5J3nScnPQLF",
+      authDomain: "metalbasliambar.firebaseapp.com",
+      projectId: "metalbasliambar",
+      storageBucket: "metalbasliambar.appspot.com",
+      messagingSenderId: "112168412666",
+      appId: "1:112168412666:web:88521a971d06b5d941866"
+    };
+
+    // Firebase'i başlat
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // GİRİŞ FONKSİYONU
+    async function login() {
+      const kadi = document.getElementById("username").value;
+      const sifre = document.getElementById("password").value;
+
+      if(kadi == "" || sifre == "") {
+        alert("Kullanıcı adı ve şifre boş olamaz!");
+        return;
+      }
+
+      try {
+        const q = db.collection("kullanicilar").where("kadi", "==", kadi).where("sifre", "==", sifre);
+        const querySnapshot = await q.get();
+        
+        if (!querySnapshot.empty) {
+          alert("Giriş başarılı!");
+          window.location.href = "panel.html
