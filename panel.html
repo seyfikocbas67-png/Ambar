@@ -5,77 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Metal Başlık Ambar V11.2</title>
 <style>
-*{box-sizing:border-box}
-body{font-family:system-ui;background:#f1f5f9;margin:0;padding:15px}
-.header{background:#2563eb;color:white;padding:15px;border-radius:12px;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.header button{background:#ef4444;color:white;border:none;padding:8px 15px;border-radius:8px;cursor:pointer;font-weight:bold}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
-.kart{background:white;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1);text-align:center;cursor:pointer;transition:0.2s;border:2px solid transparent}
-.kart:hover{transform:translateY(-3px);border-color:#2563eb}
-.kart h3{margin:10px 0 5px;color:#2563eb;font-size:16px}
-.kart p{margin:0;font-size:12px;color:#666}
-.icon{font-size:30px}
-</style>
-</head>
-<body>
-<div class="header">
-  <div>
-    <h1 style="margin:0;font-size:20px">METAL BAŞLIK AMBAR V11.2</h1>
-    <small>Hoşgeldin: <b id="kullanici">ADMIN</b></small>
-  </div>
-  <button onclick="cikis()">ÇIKIŞ</button>
-</div>
-
-<div class="grid">
-  <div class="kart" onclick="alert('Depo Yönetimi açılacak')">
-    <div class="icon">📦</div><h3>Depo Yönetimi</h3><p>Ürün Ekle / Çıkar</p>
-  </div>
-  <div class="kart" onclick="alert('Sevkiyat açılacak')">
-    <div class="icon">🚚</div><h3>Sevkiyat</h3><p>Yükleme / İrsaliye</p>
-  </div>
-  <div class="kart" onclick="alert('Personel açılacak')">
-    <div class="icon">👷</div><h3>Personel</h3><p>Vardiya / Maaş</p>
-  </div>
-  <div class="kart" onclick="alert('Raporlar açılacak')">
-    <div class="icon">📊</div><h3>Raporlar</h3><p>Günlük / Aylık</p>
-  </div>
-  <div class="kart" onclick="alert('Ayarlar açılacak')">
-    <div class="icon">⚙️</div><h3>Ayarlar</h3><p>Kullanıcı / Yedek</p>
-  </div>
-  <div class="kart" onclick="alert('Stok Sayım açılacak')">
-    <div class="icon">📋</div><h3>Stok Sayım</h3><p>Envanter</p>
-  </div>
-</div>
-
-<script>
-// SADECE ÇIKIŞ İÇİN KONTROL
-function cikis(){
-  localStorage.removeItem("aktifKullanici");
-  window.location.replace("index.html");
-}
-
-// Kullanıcı adını yaz
-const k = localStorage.getItem("aktifKullanici");
-if(k){ document.getElementById("kullanici").innerText = k; }
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metal Başlık Ambar V11.2</title>
-<style>
 * {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif;}
 body {background:#f2f4f7; padding:15px;}
 .header {background: linear-gradient(90deg, #0072ff, #00c6ff); color:#fff; padding:20px; border-radius:15px; margin-bottom:20px;}
 .header h1 {font-size:20px; margin-bottom:5px;}
 .header p {font-size:14px; opacity:0.9;}
-.cikis {background:#ff4d4d; color:#fff; border:none; padding:8px 15px; border-radius:8px; margin-top:10px; cursor:pointer; font-weight:600;}
-.grid {display:grid; grid-template-columns: 1fr 1fr; gap:15px;}
+.cikis {background:#ff4d4d; color:#fff; border:none; padding:8px 15px; border-radius:8px; margin-top:10px; cursor:pointer; font-weight:600; float:right;}
+.grid {display:grid; grid-template-columns: 1fr 1fr; gap:15px; clear:both;}
 .card {background:#fff; padding:20px 10px; border-radius:15px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); cursor:pointer; transition:0.2s;}
-.card:hover {transform:translateY(-3px); box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+.card:hover {transform:translateY(-3px);}
 .card .icon {font-size:40px; margin-bottom:10px;}
 .card .title {font-size:16px; font-weight:700; color:#0072ff; margin-bottom:5px;}
 .card .desc {font-size:12px; color:#666;}
@@ -84,9 +22,9 @@ body {background:#f2f4f7; padding:15px;}
 <body>
 
 <div class="header">
+  <button class="cikis" onclick="window.location.replace('index.html')">ÇIKIŞ</button>
   <h1>METAL BAŞLIK AMBAR V11.2</h1>
   <p>Hoşgeldin: <b>ADMIN</b></p>
-  <button class="cikis" onclick="window.location.replace('index.html')">ÇIKIŞ</button>
 </div>
 
 <div class="grid">
