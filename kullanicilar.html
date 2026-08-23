@@ -1,14 +1,105 @@
-<script>
-const yetki = localStorage.getItem('kullaniciYetki');
-const ad = localStorage.getItem('kullaniciAd');
-if(ad) document.querySelector('.header p b').innerText = ad;
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kullanıcılar</title>
+<style>
+* {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif;}
+body {background:#f2f4f7; padding:15px;}
+.header {display:flex; justify-content:space-between; align-items:center; background:#0072ff; color:#fff; padding:15px; border-radius:10px; margin-bottom:15px;}
+.header h2 {font-size:18px;}
+.btn {padding:10px 15px; background:#00c6ff; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600;}
+.btn-kucuk {padding:5px 10px; font-size:12px; background:#ff4d4d;}
+.form, .liste {background:#fff; padding:15px; border-radius:10px; margin-bottom:15px;}
+input, select {width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:8px;}
+.satir {display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee;}
+.admin {color:#0072ff; font-weight:700;}
+.limited {color:#ff4d4d; font-weight:700;}
+.hata {background:#ffeb; color:#d00; padding:10px; border-radius:8px; margin-bottom:10px;}
+</style>
+</head>
+<body>
 
-if(yetki === "limited"){
-  document.querySelectorAll('.card').forEach(card => {
-    const title = card.querySelector('.title').innerText;
-    if(title!== "Depo Yönetimi" && title!== "Stok Sayım"){
-      card.style.display = "none";
-    }
-  });
+<div class="header">
+  <h2>👥 Kullanıcı Yönetimi</h2>
+  <button class="btn" onclick="window.location='panel.html'">Geri</button>
+</div>
+
+<div id="hataAlani"></div>
+
+<div class="form">
+  <h3>Yeni Kullanıcı Ekle</h3>
+  <input type="text" id="kullaniciAd" placeholder="Kullanıcı Adı Örn: Ahmet">
+  <select id="kullaniciYetki">
+    <option value="admin">ADMIN - Tüm Yetkiler</option>
+    <option value="limited">LIMITED - Sadece Depo + Stok</option>
+  </select>
+  <button class="btn" onclick="kullaniciEkle()">Kullanıcı Ekle</button>
+</div>
+
+<div class="liste">
+  <h3>Kayıtlı Kullanıcılar</h3>
+  <div id="kullaniciListesi">Yükleniyor...</div>
+</div>
+
+<script type="module">
+try {
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
+    authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
+    projectId: "metalbaslikambar-94c7e",
+    storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
+    messagingSenderId: "313915466857",
+    appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  async function listele(){
+    const alan = document.getElementById('kullaniciListesi'); 
+    alan.innerHTML="Yükleniyor...";
+    const snap = await getDocs(collection(db, "kullanicilar"));
+    if(snap.empty){ alan.innerHTML = "Henüz kullanıcı yok. İlk kullanıcıyı ekle."; return; }
+    
+    let html = "";
+    snap.forEach(d => {
+      const data = d.data();
+      const yetkiClass = data.yetki === "admin"? "admin" : "limited";
+      const yetkiYazi = data.yetki === "admin"? "ADMIN" : "LIMITED";
+      html += `<div class="satir">
+        <div><b>${data.ad}</b> - <span class="${yetkiClass}">${yetkiYazi}</span></div>
+        <button class="btn btn-kucuk" onclick="sil('${d.id}')">Sil</button>
+      </div>`;
+    });
+    alan.innerHTML = html;
+  }
+
+  window.kullaniciEkle = async function(){
+    const ad = document.getElementById('kullaniciAd').value.trim();
+    const yetki = document.getElementById('kullaniciYetki').value;
+    if(!ad) return alert("Kullanıcı adı gir");
+    await addDoc(collection(db, "kullanicilar"), {ad, yetki});
+    document.getElementById('kullaniciAd').value="";
+    listele(); alert("Kullanıcı eklendi");
+  }
+
+  window.sil = async function(id){ 
+    if(confirm("Bu kullanıcıyı silmek istiyor musun?")){ 
+      await deleteDoc(doc(db,"kullanicilar",id)); 
+      listele(); 
+    } 
+  }
+
+  listele();
+
+} catch(err) {
+  document.getElementById('hataAlani').innerHTML = `<div class="hata">Hata: ${err.message} <br> İnternet bağlantını ve Firebase ayarlarını kontrol et.</div>`;
+  document.getElementById('kullaniciListesi').innerHTML = "Yüklenemedi";
 }
 </script>
+</body>
+</html>
