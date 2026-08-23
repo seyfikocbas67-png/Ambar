@@ -67,3 +67,17 @@ body {background:#f2f4f7; padding:15px;}
 
 </body>
 </html>
+<script>
+const yetki = localStorage.getItem('kullaniciYetki');
+const ad = localStorage.getItem('kullaniciAd');
+if(ad) document.querySelector('.header p b').innerText = ad;
+
+if(yetki === "limited"){
+  document.querySelectorAll('.card').forEach(card => {
+    const title = card.querySelector('.title').innerText;
+    if(title!== "Depo Yönetimi" && title!== "Stok Sayım"){
+      card.style.display = "none";
+    }
+  });
+}
+</script>
