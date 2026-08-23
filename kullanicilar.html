@@ -8,7 +8,6 @@
 * {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif;}
 body {background:#f2f4f7; padding:15px;}
 .header {display:flex; justify-content:space-between; align-items:center; background:#0072ff; color:#fff; padding:15px; border-radius:10px; margin-bottom:15px;}
-.header h2 {font-size:18px;}
 .btn {padding:10px 15px; background:#00c6ff; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600;}
 .btn-kucuk {padding:5px 10px; font-size:12px; background:#ff4d4d;}
 .form, .liste {background:#fff; padding:15px; border-radius:10px; margin-bottom:15px;}
@@ -16,7 +15,6 @@ input, select {width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; bo
 .satir {display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee;}
 .admin {color:#0072ff; font-weight:700;}
 .limited {color:#ff4d4d; font-weight:700;}
-.hata {background:#ffeb; color:#d00; padding:10px; border-radius:8px; margin-bottom:10px;}
 </style>
 </head>
 <body>
@@ -26,11 +24,10 @@ input, select {width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; bo
   <button class="btn" onclick="window.location='panel.html'">Geri</button>
 </div>
 
-<div id="hataAlani"></div>
-
 <div class="form">
   <h3>Yeni Kullanıcı Ekle</h3>
-  <input type="text" id="kullaniciAd" placeholder="Kullanıcı Adı Örn: Ahmet">
+  <input type="text" id="kullaniciAd" placeholder="Kullanıcı Adı">
+  <input type="password" id="kullaniciSifre" placeholder="Şifre">
   <select id="kullaniciYetki">
     <option value="admin">ADMIN - Tüm Yetkiler</option>
     <option value="limited">LIMITED - Sadece Depo + Stok</option>
@@ -44,62 +41,43 @@ input, select {width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; bo
 </div>
 
 <script type="module">
-try {
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
-    authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
-    projectId: "metalbaslikambar-94c7e",
-    storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
-    messagingSenderId: "313915466857",
-    appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8"
-  };
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const app = initializeApp({apiKey:"AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",authDomain:"metalbaslikambar-94c7e.firebaseapp.com",projectId:"metalbaslikambar-94c7e"});
+const db = getFirestore(app);
 
-  async function listele(){
-    const alan = document.getElementById('kullaniciListesi'); 
-    alan.innerHTML="Yükleniyor...";
-    const snap = await getDocs(collection(db, "kullanicilar"));
-    if(snap.empty){ alan.innerHTML = "Henüz kullanıcı yok. İlk kullanıcıyı ekle."; return; }
-    
-    let html = "";
-    snap.forEach(d => {
-      const data = d.data();
-      const yetkiClass = data.yetki === "admin"? "admin" : "limited";
-      const yetkiYazi = data.yetki === "admin"? "ADMIN" : "LIMITED";
-      html += `<div class="satir">
-        <div><b>${data.ad}</b> - <span class="${yetkiClass}">${yetkiYazi}</span></div>
-        <button class="btn btn-kucuk" onclick="sil('${d.id}')">Sil</button>
-      </div>`;
-    });
-    alan.innerHTML = html;
-  }
-
-  window.kullaniciEkle = async function(){
-    const ad = document.getElementById('kullaniciAd').value.trim();
-    const yetki = document.getElementById('kullaniciYetki').value;
-    if(!ad) return alert("Kullanıcı adı gir");
-    await addDoc(collection(db, "kullanicilar"), {ad, yetki});
-    document.getElementById('kullaniciAd').value="";
-    listele(); alert("Kullanıcı eklendi");
-  }
-
-  window.sil = async function(id){ 
-    if(confirm("Bu kullanıcıyı silmek istiyor musun?")){ 
-      await deleteDoc(doc(db,"kullanicilar",id)); 
-      listele(); 
-    } 
-  }
-
-  listele();
-
-} catch(err) {
-  document.getElementById('hataAlani').innerHTML = `<div class="hata">Hata: ${err.message} <br> İnternet bağlantını ve Firebase ayarlarını kontrol et.</div>`;
-  document.getElementById('kullaniciListesi').innerHTML = "Yüklenemedi";
+async function listele(){
+  const alan = document.getElementById('kullaniciListesi'); alan.innerHTML="";
+  const snap = await getDocs(collection(db, "kullanicilar"));
+  if(snap.empty){ alan.innerHTML = "Henüz kullanıcı yok."; return; }
+  
+  snap.forEach(d => {
+    const data = d.data();
+    const yetkiClass = data.yetki === "admin"? "admin" : "limited";
+    alan.innerHTML += `<div class="satir">
+      <div><b>${data.ad}</b> - <span class="${yetkiClass}">${data.yetki.toUpperCase()}</span></div>
+      <button class="btn btn-kucuk" onclick="sil('${d.id}')">Sil</button>
+    </div>`;
+  });
 }
+
+window.kullaniciEkle = async function(){
+  const ad = document.getElementById('kullaniciAd').value.trim();
+  const sifre = document.getElementById('kullaniciSifre').value;
+  const yetki = document.getElementById('kullaniciYetki').value;
+  if(!ad || !sifre) return alert("Ad ve şifre gir");
+  await addDoc(collection(db, "kullanicilar"), {ad, sifre, yetki});
+  document.getElementById('kullaniciAd').value="";
+  document.getElementById('kullaniciSifre').value="";
+  listele(); alert("Kullanıcı eklendi");
+}
+
+window.sil = async function(id){ 
+  if(confirm("Silinsin mi?")){ await deleteDoc(doc(db,"kullanicilar",id)); listele(); } 
+}
+
+listele();
 </script>
 </body>
 </html>
