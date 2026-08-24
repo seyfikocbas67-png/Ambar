@@ -1,99 +1,97 @@
+Tekrar deniyorum, umarım bu kez iletilir. İletişim butonlu index.html kodları:```html
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metal Başlık Ambar - Admin</title>
+<title>Metal Başlık Ambar - Giriş</title>
 <style>
-* {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif;}
-body {height:100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); display:flex; justify-content:center; align-items:center;}
-.glass {width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2); padding: 40px 30px;}
-.logo {text-align:center; font-size:24px; font-weight:700; color:#fff; margin-bottom:30px; letter-spacing:2px;}
-.input-group {position: relative; margin-bottom:20px;}
-.input-group input {width:100%; padding:15px; background: rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.3); border-radius:10px; color:#fff; font-size:16px; outline:none;}
-.input-group input::placeholder {color: rgba(255,255,255,0.6);}
-.input-group .goz-btn {position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:20px;}
-.btn {width:100%; padding:15px; background: linear-gradient(90deg, #00c6ff, #0072ff); border:none; border-radius:10px; color:#fff; font-size:18px; font-weight:600; cursor:pointer; margin-top:10px;}
-#mesaj {text-align:center; margin-top:15px; font-weight:600; height:20px; color:#fff;}
-.iletisim {margin-top:25px; padding-top:15px; border-top:1px solid rgba(255,255,255,0.2); text-align:center; font-size:13px; color:rgba(255,255,255,0.8);}
-.iletisim b {color:#00c6ff;}
+​{ margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+body { height:100vh; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); display:flex; justify-content:center; align-items:center; }
+.glass { width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 45px 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: center; }
+.logo { font-size:26px; font-weight:800; color:#fff; margin-bottom:30px; letter-spacing:3px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.input-group { position: relative; margin-bottom:25px; }
+.input-group input { width:100%; padding:15px 20px; background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:15px; color:#fff; font-size:16px; outline:none; transition: all 0.3s; }
+.input-group input::placeholder { color: rgba(255,255,255,0.4); }
+.input-group input:focus { border-color: #00c6ff; background: rgba(255,255,255,0.1); box-shadow: 0 0 15px rgba(0,198,255,0.2); }
+.input-group .goz-btn { position:absolute; right:15px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; font-size:18px; color: rgba(255,255,255,0.6); }
+.btn { width:100%; padding:16px; background: linear-gradient(90deg, #00c6ff, #0072ff); border:none; border-radius:15px; color:#fff; font-size:18px; font-weight:700; cursor:pointer; transition: all 0.3s; box-shadow: 0 5px 15px rgba(0,114,255,0.3); }
+.btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,114,255,0.5); filter: brightness(1.1); }
+#mesaj { margin-top:20px; font-weight:600; height:24px; color:#fff; font-size:15px; }
+.footer { margin-top:35px; pt-15px; border-top:1px solid rgba(255,255,255,0.1); text-align:center; font-size:13px; color:rgba(255,255,255,0.5); }
+.iletisim-btn { background: none; border: none; color: #00c6ff; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: underline; margin-top: 10px; transition: color 0.3s; }
+.iletisim-btn:hover { color: #fff; }
 </style>
 </head>
 <body>
-
-<div class="glass">
-  <div class="logo">METAL BAŞLIK AMBAR</div>
-  <div class="input-group">
-    <input type="text" id="kadi" placeholder="Kullanıcı Adı" value="admin123">
-  </div>
-  <div class="input-group">
-    <input type="password" id="sifre" placeholder="Şifre" value="Tm12345">
-    <button type="button" class="goz-btn" onclick="sifreGoster()">👁️</button>
-  </div>
-  <button class="btn" id="girisyapBtn">GİRİŞ YAP</button>
-  <p id="mesaj"></p>
-  <div class="iletisim">
-    <b>İletişim:</b> 0555 186 1667
-  </div>
+​<div class="glass">
+<div class="logo">METAL BAŞLIK AMBAR</div>
+​<div class="input-group">
+<input type="text" id="kadi" placeholder="Kullanıcı Adı">
 </div>
-
-<script type="module">
+​<div class="input-group">
+<input type="password" id="sifre" placeholder="Şifre">
+<button type="button" class="goz-btn" onclick="sifreGoster()">👁️</button>
+</div>
+​<button class="btn" id="girisyapBtn">GİRİŞ YAP</button>
+​<p id="mesaj"></p>
+​<div>
+<button class="iletisim-btn" onclick="window.location.href='tel:05551861667'">Bize Ulaşın</button>
+</div>
+​<div class="footer">
+© 2026 Metal Başlık Ambar. Tüm Hakları Saklıdır.
+</div>
+</div>
+​<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
-  authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
-  projectId: "metalbaslikambar-94c7e",
-  storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
-  messagingSenderId: "313915466857",
-  appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8",
-  measurementId: "G-X6YFMY86KX"
+​const firebaseConfig = {
+apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
+authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
+projectId: "metalbaslikambar-94c7e",
+storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
+messagingSenderId: "313915466857",
+appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8e",
+measurementId: "G-X6YFMY86KX"
 };
-
-const app = initializeApp(firebaseConfig);
+​const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-window.sifreGoster = function(){
-  const sifreInput = document.getElementById("sifre");
-  const btn = event.target;
-  if(sifreInput.type === "password"){
-    sifreInput.type = "text"; btn.innerText = "🙈";
-  } else {
-    sifreInput.type = "password"; btn.innerText = "👁️";
-  }
+​window.sifreGoster = function(){
+const sifreInput = document.getElementById("sifre");
+const btn = event.target;
+if(sifreInput.type === "password"){
+sifreInput.type = "text"; btn.innerText = "🙈";
+} else {
+sifreInput.type = "password"; btn.innerText = "👁️";
 }
-
-document.getElementById('girisyapBtn').addEventListener('click', girisYap);
-
-async function girisYap() {
-  const kadi = document.getElementById('kadi').value;
-  const sifre = document.getElementById('sifre').value;
-  const mesaj = document.getElementById('mesaj');
-  mesaj.innerText = "Kontrol ediliyor...";
-
-  try {
-    const ref = doc(db, "kullanicilar", "admin123");
-    const snap = await getDoc(ref);
-
-    if (snap.exists()) {
-      const data = snap.data();
-      if (data.kadi === kadi && data.sifre === sifre) {
-        mesaj.style.color = "#00ff88";
-        mesaj.innerText = "Başarılı! Yönlendiriliyor...";
-        setTimeout(() => { window.location.replace("panel.html"); }, 1200); // PANEL.HTML OLDU
-      } else {
-        mesaj.style.color = "#ff4d4d";
-        mesaj.innerText = "Kullanıcı adı veya şifre hatalı";
-      }
-    } else {
-      mesaj.style.color = "#ff4d4d";
-      mesaj.innerText = "Kullanıcı bulunamadı";
-    }
-  } catch(e) {
-    mesaj.style.color = "#ff4d4d";
-    mesaj.innerText = "HATA: " + e.message;
-  }
+}
+​document.getElementById('girisyapBtn').addEventListener('click', girisYap);
+​async function girisYap() {
+const kadi = document.getElementById('kadi').value;
+const sifre = document.getElementById('sifre').value;
+const mesaj = document.getElementById('mesaj');
+mesaj.innerText = "Kontrol ediliyor...";
+​try {
+const ref = doc(db, "kullanicilar", "admin123");
+const snap = await getDoc(ref);
+​if (snap.exists()) {
+const data = snap.data();
+if (data.kadi === kadi && data.sifre === sifre) {
+mesaj.style.color = "#00ff88";
+mesaj.innerText = "Başarılı! Yönlendiriliyor...";
+setTimeout(() => { window.location.replace("panel.html"); }, 1200);
+} else {
+mesaj.style.color = "#ff4d4d";
+mesaj.innerText = "Kullanıcı adı veya şifre hatalı";
+}
+} else {
+mesaj.style.color = "#ff4d4d";
+mesaj.innerText = "Kullanıcı bulunamadı";
+}
+} catch(e) {
+mesaj.style.color = "#ff4d4d";
+mesaj.innerText = "HATA: " + e.message;
+}
 }
 </script>
 </body>
