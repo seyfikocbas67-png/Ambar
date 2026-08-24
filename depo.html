@@ -5,213 +5,248 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Depo Yönetimi</title>
 <style>
-* {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif;}
-body {background:#f2f4f7; padding:15px;}
-.header {display:flex; justify-content:space-between; align-items:center; background:#0072ff; color:#fff; padding:15px; border-radius:10px; margin-bottom:15px;}
-.btn {padding:10px 15px; background:#00c6ff; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600;}
-.btn-kucuk {padding:5px 10px; font-size:12px; margin-left:5px;}
-.btn-duzenle {background:#ffc107; color:#000;}
-.btn-sil {background:#ff4d4d;}
-.form, .liste {background:#fff; padding:15px; border-radius:10px; margin-bottom:15px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
-input, select {width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:8px;}
-.kritik {background:#ffeb; border-left:4px solid #ff4d4d;}
-.depo-secim button {margin-right:10px; padding:10px 20px; border:none; border-radius:8px; cursor:pointer;}
-.aktif {background:#0072ff; color:#fff;}
-.pasif {background:#ddd;}
-.bildirim {background:#fff3cd; padding:10px; border-radius:8px; margin-bottom:10px; color:#856404;}
-.stok-satir {display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #eee;}
+​{ margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+body { background:#f4f7f6; color:#333; padding:20px; }
+.container { max-width: 800px; margin: 0 auto; }
+.header { display:flex; justify-content:space-between; align-items:center; background:#005cbb; color:#fff; padding:15px 25px; border-radius:15px; margin-bottom:20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.header h2 { font-size: 22px; display: flex; align-items: center; gap: 10px; }
+.btn { padding:12px 20px; background:#00c6ff; color:#fff; border:none; border-radius:12px; cursor:pointer; font-weight:600; transition: all 0.2s; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+.btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); background: #0077cd; }
+.btn-small { padding:8px 12px; font-size:13px; }
+.btn-edit { background:#ffc107; color:#333; }
+.btn-delete { background:#ff4444; }
+.form-card { background:#fff; padding:25px; border-radius:20px; margin-bottom:20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.form-title { font-size: 18px; color: #005cbb; margin-bottom: 20px; border-bottom: 2px solid #e1e8ed; padding-bottom: 10px; }
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.input-full { grid-column: span 2; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display:block; font-size:13px; color:#666; margin-bottom:5px; font-weight: 500; }
+.form-group input, .form-group select { width:100%; padding:14px; border:1px solid #d1d8e0; border-radius:12px; background:#f9fcff; transition: border-color 0.2s; }
+.form-group input:focus, .form-group select:focus { border-color:#005cbb; outline:none; }
+.form-group input[type="file"] { padding: 10px; }
+.depo-switch { display:flex; gap:10px; margin-bottom:20px; }
+.depo-btn { flex: 1; padding: 14px; border:none; border-radius:15px; cursor:pointer; font-weight:600; font-size:15px; transition: all 0.2s; background:#e1e8ed; color:#666; }
+.depo-btn.active { background:#005cbb; color:#fff; box-shadow:0 4px 6px rgba(0,92,187,0.3); }
+.stok-liste-card { background:#fff; padding:25px; border-radius:20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.stok-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.stok-header h3 { font-size: 18px; color: #333; }
+.stok-item { display:flex; justify-content:space-between; align-items:center; padding:16px; border:1px solid #e1e8ed; border-radius:15px; margin-bottom:12px; transition: background 0.2s; background: #fcfdfe; }
+.stok-item:hover { background: #f4f9ff; }
+.item-info { display:flex; align-items:center; gap:15px; }
+.item-img { width:55px; height:55px; object-fit:cover; border-radius:12px; border:1px solid #e1e8ed; }
+.item-img-placeholder { width:55px; height:55px; display:flex; align-items:center; justify-content:center; background:#f1f4f8; border-radius:12px; border:1px solid #d1d8e0; font-size:11px; color:#999; text-align:center; }
+.item-details b { font-size:16px; color:#222; display:block; }
+.item-details span { font-size:13px; color:#666; }
+.item-actions { display:flex; gap:8px; }
+.kritik { background: #fff5f5 !important; border-color: #ffcccc !important; }
+.kritik b { color: #cc0000; }
+.alert-box { background:#fffadc; padding:15px; border-radius:15px; border-left:4px solid #ffcc00; margin-bottom:20px; font-weight:500; color:#554400; box-shadow:0 2px 4px rgba(0,0,0,0.05); }
+.actions-row { display: flex; gap: 10px; margin-top: 10px; }
 </style>
 </head>
 <body>
-
+​<div class="container">
 <div class="header">
-  <h2>📦 Depo Yönetimi</h2>
-  <button class="btn" onclick="window.location='panel.html'">Geri</button>
+<h2>📦 Depo Yönetimi</h2>
+<button class="btn" onclick="window.location='panel.html'">Geri</button>
 </div>
-
-<div id="bildirimAlani"></div>
-
-<div class="depo-secim">
-  <button id="btnAna" class="aktif" onclick="depoDegistir('Ana Depo')">Ana Depo</button>
-  <button id="btnMakine" class="pasif" onclick="depoDegistir('Makine Deposu')">Makine Deposu</button>
+​<div id="bildirimAlani"></div>
+​<div class="depo-switch">
+<button id="btnAna" class="depo-btn active" onclick="depoDegistir('Ana Depo')">Ana Depo</button>
+<button id="btnMakine" class="depo-btn" onclick="depoDegistir('Makine Deposu')">Makine Deposu</button>
 </div>
-
-<div class="form">
-  <h3 id="formBaslik">Yeni Malzeme Ekle</h3>
-  <input type="hidden" id="duzenleId">
-  <input type="text" id="malzemeAdi" placeholder="Malzeme Adı">
-  <input type="number" id="miktar" placeholder="Miktar" value="1">
-  <select id="makineSecim">
-    <option value="">Makine Seç - Opsiyonel</option>
-    <option>Başaran 1</option>
-    <option>Başaran 2</option>
-    <option>Başaran 3</option>
-    <option>BMW NUMALLIANCE</option>
-    <option>BJA NUMALLIANCE</option>
-  </select>
-  <button class="btn" id="kaydetBtn" onclick="malzemeKaydet()">Ekle</button>
-  <button class="btn" style="background:#6c757d; display:none;" id="iptalBtn" onclick="iptalEt()">İptal</button>
+​<div class="form-card">
+<h3 id="formBaslik" class="form-title">Yeni Malzeme Ekle</h3>
+<input type="hidden" id="duzenleId">
+​<div class="input-grid">
+<div class="form-group input-full">
+<label>Malzeme Adı</label>
+<input type="text" id="malzemeAdi" placeholder="Malzeme ismini girin">
 </div>
-
-<div class="form" id="transferForm" style="display:none;">
-  <h3>Transfer Yap</h3>
-  <select id="transferMalzeme"></select>
-  <input type="number" id="transferMiktar" placeholder="Transfer Miktarı">
-  <button class="btn" onclick="transferYap()">Ana Depodan Makineye Transfer Et</button>
+​<div class="form-group">
+<label>Miktar</label>
+<input type="number" id="miktar" placeholder="Adet" value="1">
 </div>
-
-<div class="liste">
-  <h3 id="listeBaslik">Ana Depo Stokları</h3>
-  <div id="stokListesi"></div>
+​<div class="form-group">
+<label>Makine (Opsiyonel)</label>
+<select id="makineSecim">
+<option value="">Seçim Yapılmadı</option>
+<option>Başaran 1</option>
+<option>Başaran 2</option>
+<option>Başaran 3</option>
+<option>BMW NUMALLIANCE</option>
+<option>BJA NUMALLIANCE</option>
+</select>
 </div>
-
-<script type="module">
+​<div class="form-group input-full">
+<label>Malzeme Görseli (Opsiyonel)</label>
+<input type="file" id="gorselInput" accept="image/*">
+</div>
+</div>
+​<div class="actions-row">
+<button class="btn" id="kaydetBtn" onclick="malzemeKaydet()">Ekle</button>
+<button class="btn" id="iptalBtn" style="background:#a5b1c2; display:none;" onclick="iptalEt()">İptal</button>
+</div>
+</div>
+​<div class="form-card" id="transferForm" style="display:none;">
+<h3 class="form-title">Transfer Yap</h3>
+<div class="input-grid">
+<div class="form-group input-full">
+<label>Transfer Edilecek Malzeme</label>
+<select id="transferMalzeme"></select>
+</div>
+<div class="form-group input-full">
+<label>Transfer Miktarı</label>
+<input type="number" id="transferMiktar" placeholder="Miktar girin">
+</div>
+</div>
+<button class="btn" onclick="transferYap()">Ana Depodan Makineye Transfer Et</button>
+</div>
+​<div class="stok-liste-card">
+<div class="stok-header">
+<h3 id="listeBaslik">Ana Depo Stokları</h3>
+</div>
+<div id="stokListesi"></div>
+</div>
+</div>
+​<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
-  authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
-  projectId: "metalbaslikambar-94c7e",
-  storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
-  messagingSenderId: "313915466857",
-  appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8"
+​const firebaseConfig = {
+apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
+authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
+projectId: "metalbaslikambar-94c7e",
+storageBucket: "metalbaslikambar-94c7e.firebasestorage.app",
+messagingSenderId: "313915466857",
+appId: "1:313915466857:web:bb87fcac0c07dfbd02eef8e"
 };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-let aktifDepo = "Ana Depo";
+​let aktifDepo = "Ana Depo";
 const KRITIK_STOK = 2;
-
-window.depoDegistir = function(depo){
-  aktifDepo = depo;
-  document.getElementById('btnAna').className = depo === "Ana Depo" ? "aktif" : "pasif";
-  document.getElementById('btnMakine').className = depo === "Makine Deposu" ? "aktif" : "pasif";
-  document.getElementById('listeBaslik').innerText = depo + " Stokları";
-  document.getElementById('transferForm').style.display = depo === "Ana Depo" ? "block" : "none";
-  iptalEt();
-  stoklariListele();
-  bildirimleriKontrolEt();
+​function resimBase64eCevir(file) {
+return new Promise((resolve, reject) => {
+if (!file) return resolve(null);
+const reader = new FileReader();
+reader.readAsDataURL(file);
+reader.onload = () => resolve(reader.result);
+reader.onerror = error => reject(error);
+});
 }
-
-async function stoklariListele(){
-  const liste = document.getElementById('stokListesi');
-  liste.innerHTML = "Yükleniyor...";
-  const q = query(collection(db, "stok"), where("depo", "==", aktifDepo));
-  const snap = await getDocs(q);
-  let html = "";
-  snap.forEach(docSnap => {
-    const d = docSnap.data();
-    const kritikClass = d.miktar <= KRITIK_STOK ? "kritik" : "";
-    html += `<div class="stok-satir ${kritikClass}">
-      <div>
-        <b>${d.ad}</b> - Miktar: ${d.miktar} 
-        ${d.makine ? ' | Makine: ' + d.makine : ''}
-      </div>
-      <div>
-        <button class="btn btn-kucuk btn-duzenle" onclick="duzenle('${docSnap.id}','${d.ad}',${d.miktar},'${d.makine || ''}')">Düzenle</button>
-        <button class="btn btn-kucuk btn-sil" onclick="stoktanDus('${docSnap.id}',${d.miktar})">-1 Düş</button>
-      </div>
-    </div>`;
-  });
-  liste.innerHTML = html || "Stok yok";
-  transferSelectDoldur();
+​window.depoDegistir = function(depo){
+aktifDepo = depo;
+document.getElementById('btnAna').className = depo === "Ana Depo" ? "depo-btn active" : "depo-btn";
+document.getElementById('btnMakine').className = depo === "Makine Deposu" ? "depo-btn active" : "depo-btn";
+document.getElementById('listeBaslik').innerText = depo + " Stokları";
+document.getElementById('transferForm').style.display = depo === "Ana Depo" ? "block" : "none";
+iptalEt();
+stoklariListele();
+bildirimleriKontrolEt();
 }
-
-async function transferSelectDoldur(){
-  const select = document.getElementById('transferMalzeme');
-  select.innerHTML = "";
-  const q = query(collection(db, "stok"), where("depo", "==", "Ana Depo"));
-  const snap = await getDocs(q);
-  snap.forEach(docSnap => {
-    const d = docSnap.data();
-    select.innerHTML += `<option value="${docSnap.id}">${d.ad} - Stok: ${d.miktar}</option>`;
-  });
+​async function stoklariListele(){
+const liste = document.getElementById('stokListesi');
+liste.innerHTML = "Yükleniyor...";
+const q = query(collection(db, "stok"), where("depo", "==", aktifDepo));
+const snap = await getDocs(q);
+let html = "";
+snap.forEach(docSnap => {
+const d = docSnap.data();
+const kritikClass = d.miktar <= KRITIK_STOK ? "kritik" : "";
+const resimHtml = d.gorsel
+? <img src="${d.gorsel}" class="item-img" alt="malzeme">
+: <div class="item-img-placeholder">Görsel<br>Yok</div>;
+​html += <div class="stok-item ${kritikClass}"> <div class="item-info"> ${resimHtml} <div class="item-details"> <b>${d.ad}</b> <span>Miktar: ${d.miktar}</span> ${d.makine ? '<span>Makine: ' + d.makine + '</span>' : ''} </div> </div> <div class="item-actions"> <button class="btn btn-small btn-edit" onclick="duzenle('${docSnap.id}','${d.ad}',${d.miktar},'${d.makine || ''}')">Düzenle</button> <button class="btn btn-small btn-delete" onclick="stoktanDus('${docSnap.id}',${d.miktar})">-1</button> </div> </div>;
+});
+liste.innerHTML = html || "Bu depoda hiç stok yok.";
+transferSelectDoldur();
 }
-
-window.malzemeKaydet = async function(){
-  const id = document.getElementById('duzenleId').value;
-  const ad = document.getElementById('malzemeAdi').value;
-  const miktar = parseInt(document.getElementById('miktar').value);
-  const makine = document.getElementById('makineSecim').value;
-  if(!ad || !miktar) return alert("Ad ve miktar gir");
-  
-  if(id){ // GÜNCELLE
-    await updateDoc(doc(db, "stok", id), {ad, miktar, makine: makine || null});
-    alert("Güncellendi");
-  } else { // EKLE
-    await addDoc(collection(db, "stok"), {
-      ad, miktar, depo: aktifDepo, makine: makine || null, kritik: KRITIK_STOK
-    });
-    alert("Eklendi");
-  }
-  iptalEt(); stoklariListele(); bildirimleriKontrolEt();
+​async function transferSelectDoldur(){
+const select = document.getElementById('transferMalzeme');
+select.innerHTML = "";
+const q = query(collection(db, "stok"), where("depo", "==", "Ana Depo"));
+const snap = await getDocs(q);
+snap.forEach(docSnap => {
+const d = docSnap.data();
+select.innerHTML += <option value="${docSnap.id}">${d.ad} - Kalan: ${d.miktar}</option>;
+});
 }
-
-window.duzenle = function(id, ad, miktar, makine){
-  document.getElementById('duzenleId').value = id;
-  document.getElementById('malzemeAdi').value = ad;
-  document.getElementById('miktar').value = miktar;
-  document.getElementById('makineSecim').value = makine;
-  document.getElementById('formBaslik').innerText = "Malzemeyi Düzenle";
-  document.getElementById('kaydetBtn').innerText = "Güncelle";
-  document.getElementById('iptalBtn').style.display = "inline-block";
+​window.malzemeKaydet = async function(){
+const id = document.getElementById('duzenleId').value;
+const ad = document.getElementById('malzemeAdi').value;
+const miktar = parseInt(document.getElementById('miktar').value);
+const makine = document.getElementById('makineSecim').value;
+const gorselDosya = document.getElementById('gorselInput').files[0];
+​if(!ad || isNaN(miktar)) return alert("Lütfen malzeme adı ve miktarı girin.");
+​const gorselBase64 = await resimBase64eCevir(gorselDosya);
+​if(id){
+const guncelleData = {ad, miktar, makine: makine || null};
+if(gorselBase64) guncelleData.gorsel = gorselBase64;
+await updateDoc(doc(db, "stok", id), guncelleData);
+alert("Malzeme güncellendi.");
+} else {
+await addDoc(collection(db, "stok"), {
+ad, miktar, depo: aktifDepo, makine: makine || null, kritik: KRITIK_STOK, gorsel: gorselBase64 || null
+});
+alert("Malzeme eklendi.");
 }
-
-window.iptalEt = function(){
-  document.getElementById('duzenleId').value = "";
-  document.getElementById('malzemeAdi').value = "";
-  document.getElementById('miktar').value = "1";
-  document.getElementById('makineSecim').value = "";
-  document.getElementById('formBaslik').innerText = "Yeni Malzeme Ekle";
-  document.getElementById('kaydetBtn').innerText = "Ekle";
-  document.getElementById('iptalBtn').style.display = "none";
+iptalEt(); stoklariListele(); bildirimleriKontrolEt();
 }
-
-window.stoktanDus = async function(id, mevcutMiktar){
-  if(mevcutMiktar <= 1){
-    if(confirm("Stok 0 olacak. Silinsin mi?")){
-      await deleteDoc(doc(db, "stok", id));
-    }
-  } else {
-    await updateDoc(doc(db, "stok", id), {miktar: mevcutMiktar - 1});
-  }
-  stoklariListele(); bildirimleriKontrolEt();
+​window.duzenle = function(id, ad, miktar, makine){
+document.getElementById('duzenleId').value = id;
+document.getElementById('malzemeAdi').value = ad;
+document.getElementById('miktar').value = miktar;
+document.getElementById('makineSecim').value = makine;
+document.getElementById('formBaslik').innerText = "Malzemeyi Düzenle";
+document.getElementById('kaydetBtn').innerText = "Güncelle";
+document.getElementById('iptalBtn').style.display = "inline-block";
 }
-
-window.transferYap = async function(){
-  const malzemeId = document.getElementById('transferMalzeme').value;
-  const miktar = parseInt(document.getElementById('transferMiktar').value);
-  if(!malzemeId || !miktar) return alert("Seçim yap");
-  
-  const anaRef = doc(db, "stok", malzemeId);
-  const anaSnap = await getDocs(query(collection(db, "stok"), where("__name__", "==", malzemeId)));
-  const anaData = anaSnap.docs[0].data();
-  if(anaData.miktar < miktar) return alert("Yeterli stok yok");
-  
-  await updateDoc(anaRef, {miktar: anaData.miktar - miktar});
-  
-  await addDoc(collection(db, "stok"), {
-    ad: anaData.ad, miktar: miktar, depo: "Makine Deposu", makine: anaData.makine
-  });
-  
-  alert("Transfer yapıldı");
-  stoklariListele(); bildirimleriKontrolEt();
+​window.iptalEt = function(){
+document.getElementById('duzenleId').value = "";
+document.getElementById('malzemeAdi').value = "";
+document.getElementById('miktar').value = "1";
+document.getElementById('makineSecim').value = "";
+document.getElementById('gorselInput').value = "";
+document.getElementById('formBaslik').innerText = "Yeni Malzeme Ekle";
+document.getElementById('kaydetBtn').innerText = "Ekle";
+document.getElementById('iptalBtn').style.display = "none";
 }
-
-async function bildirimleriKontrolEt(){
-  const alan = document.getElementById('bildirimAlani');
-  alan.innerHTML = "";
-  const snap = await getDocs(collection(db, "stok"));
-  snap.forEach(docSnap => {
-    const d = docSnap.data();
-    if(d.miktar <= KRITIK_STOK){
-      alan.innerHTML += `<div class="bildirim">⚠️ KRİTİK: ${d.ad} - ${d.depo} ${d.makine ? ' | ' + d.makine : ''} - Kalan: ${d.miktar}</div>`;
-    }
-  });
+​window.stoktanDus = async function(id, mevcutMiktar){
+if(mevcutMiktar <= 1){
+if(confirm("Stok 0 olacak. Bu malzemeyi silmek istiyor musunuz?")){
+await deleteDoc(doc(db, "stok", id));
 }
-
+} else {
+await updateDoc(doc(db, "stok", id), {miktar: mevcutMiktar - 1});
+}
 stoklariListele(); bildirimleriKontrolEt();
+}
+​window.transferYap = async function(){
+const malzemeId = document.getElementById('transferMalzeme').value;
+const miktar = parseInt(document.getElementById('transferMiktar').value);
+if(!malzemeId || !miktar) return alert("Lütfen malzeme ve miktar seçin.");
+​const anaRef = doc(db, "stok", malzemeId);
+const anaSnap = await getDocs(query(collection(db, "stok"), where("name", "==", malzemeId)));
+const anaData = anaSnap.docs[0].data();
+if(anaData.miktar < miktar) return alert("Ana depoda yeterli miktar yok.");
+​await updateDoc(anaRef, {miktar: anaData.miktar - miktar});
+​await addDoc(collection(db, "stok"), {
+ad: anaData.ad, miktar: miktar, depo: "Makine Deposu", makine: anaData.makine, gorsel: anaData.gorsel || null
+});
+​alert("Transfer başarıyla yapıldı.");
+stoklariListele(); bildirimleriKontrolEt();
+}
+​async function bildirimleriKontrolEt(){
+const alan = document.getElementById('bildirimAlani');
+alan.innerHTML = "";
+const snap = await getDocs(collection(db, "stok"));
+snap.forEach(docSnap => {
+const d = docSnap.data();
+if(d.miktar <= KRITIK_STOK){
+alan.innerHTML += <div class="alert-box">⚠️ KRİTİK: ${d.ad} - ${d.depo} ${d.makine ? ' | ' + d.makine : ''} - Kalan: ${d.miktar}</div>;
+}
+});
+}
+​stoklariListele(); bildirimleriKontrolEt();
 </script>
 </body>
 </html>
