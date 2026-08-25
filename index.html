@@ -20,7 +20,7 @@ h1{color:#00a8ff}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, where, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; // addDoc eklendi
 
 const firebaseConfig = {
   apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
@@ -35,6 +35,7 @@ async function ilkAdminKontrol(){
   const snap = await getDocs(collection(db, "kullanicilar"));
   if(snap.empty){
     await addDoc(collection(db, "kullanicilar"), {kadi:"ADMIN", sifre:"admin123", rol:"ADMIN"});
+    console.log("İlk admin oluşturuldu");
   }
 }
 ilkAdminKontrol();
@@ -49,3 +50,10 @@ async function girisYap(){
     const user = snap.docs[0].data();
     localStorage.setItem("kadi", user.kadi);
     localStorage.setItem("rol", user.rol);
+    window.location.href = "depo.html";
+  } else {
+    document.getElementById('hata').innerText = "Kullanıcı adı veya şifre hatalı!";
+  }
+}
+</script>
+</body></html>
