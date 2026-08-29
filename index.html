@@ -1,59 +1,34 @@
 <!DOCTYPE html>
-<html lang="tr">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Metalbaşlık Ambar - Giriş</title>
+<html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metalbaşlık Ambar V2</title>
 <style>
-body{background:#0e1013;color:#fff;font-family:Arial;display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
-.kutu{background:#1a1d23;padding:40px;border-radius:16px;width:320px;text-align:center}
-input{width:90%;padding:12px;margin:10px 0;border-radius:8px;border:1px solid #333;background:#101316;color:#fff}
-button{width:100%;padding:12px;background:#00a8ff;border:none;border-radius:8px;color:#fff;font-weight:bold;cursor:pointer}
-h1{color:#00a8ff}
-</style></head>
-<body>
+body{background:#0a0f14;color:#e0e0e0;font-family:'Segoe UI';display:flex;justify-content:center;align-items:center;height:100vh;margin:0}
+.kutu{background:#121820;padding:40px;border-radius:20px;width:340px;box-shadow:0 0 20px #00a8ff33}
+input{width:90%;padding:14px;margin:10px 0;border-radius:10px;border:1px solid #2a2f36;background:#0a0f14;color:#fff}
+button{width:100%;padding:14px;background:linear-gradient(90deg,#00a8ff,#0077ff);border:none;border-radius:10px;color:#fff;font-weight:bold;cursor:pointer}
+h1{color:#00a8ff;text-align:center}
+</style></head><body>
 <div class="kutu">
   <h1>Metalbaşlık Ambar</h1>
   <input id="kadi" placeholder="Kullanıcı Adı">
   <input id="sifre" type="password" placeholder="Şifre">
   <button onclick="girisYap()">Giriş Yap</button>
-  <p id="hata" style="color:red"></p>
+  <p id="hata" style="color:#ff4d4d;text-align:center"></p>
 </div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; // addDoc eklendi
+import { getFirestore, collection, getDocs, query, where, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {apiKey:"AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",authDomain:"metalbaslikambar-94c7e.firebaseapp.com",projectId:"metalbaslikambar-94c7e"};
+const app = initializeApp(firebaseConfig); const db = getFirestore(app);
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDlBCI9XmeqKX3pl5_3kyu5rgpqVSspdVI",
-  authDomain: "metalbaslikambar-94c7e.firebaseapp.com",
-  projectId: "metalbaslikambar-94c7e"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// İlk admini otomatik ekle
-async function ilkAdminKontrol(){
-  const snap = await getDocs(collection(db, "kullanicilar"));
-  if(snap.empty){
-    await addDoc(collection(db, "kullanicilar"), {kadi:"ADMIN", sifre:"admin123", rol:"ADMIN"});
-    console.log("İlk admin oluşturuldu");
-  }
-}
+async function ilkAdminKontrol(){const snap=await getDocs(collection(db,"kullanicilar"));if(snap.empty){await addDoc(collection(db,"kullanicilar"),{kadi:"ADMIN",sifre:"admin123",rol:"ADMIN"});}}
 ilkAdminKontrol();
 
-async function girisYap(){
-  const kadi = document.getElementById('kadi').value;
-  const sifre = document.getElementById('sifre').value;
-  const q = query(collection(db, "kullanicilar"), where("kadi","==",kadi), where("sifre","==",sifre));
-  const snap = await getDocs(q);
-
-  if(!snap.empty){
-    const user = snap.docs[0].data();
-    localStorage.setItem("kadi", user.kadi);
-    localStorage.setItem("rol", user.rol);
-    window.location.href = "depo.html";
-  } else {
-    document.getElementById('hata').innerText = "Kullanıcı adı veya şifre hatalı!";
-  }
+window.girisYap=async function(){
+  const kadi=kadi.value,sifre=sifre.value;
+  const q=query(collection(db,"kullanicilar"),where("kadi","==",kadi),where("sifre","==",sifre));
+  const snap=await getDocs(q);
+  if(!snap.empty){const user=snap.docs[0].data();localStorage.setItem("kadi",user.kadi);localStorage.setItem("rol",user.rol);window.location.href="dashboard.html";}
+  else{hata.innerText="Kullanıcı adı veya şifre hatalı!";}
 }
-</script>
-</body></html>
+</script></body></html>
